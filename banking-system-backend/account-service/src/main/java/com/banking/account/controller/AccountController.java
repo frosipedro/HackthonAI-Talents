@@ -2,7 +2,7 @@ package com.banking.account.controller;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,27 +21,48 @@ import jakarta.validation.Valid;
 @RequestMapping("/api/accounts")
 public class AccountController {
 
-    @Autowired
-    private AccountService accountService;
+    private final AccountService accountService;
+
+    public AccountController(AccountService accountService) {
+        this.accountService = accountService;
+    }
 
     @GetMapping
     public ResponseEntity<List<Account>> getAllAccounts() {
-        return ResponseEntity.ok(accountService.findAllAccounts());
+        List<Account> accounts = accountService.findAllAccounts();
+        return ResponseEntity.ok(accounts);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Account> getAccountById(@PathVariable Long id) {
-        return ResponseEntity.ok(accountService.findAccountById(id));
+        if (id == null || id <= 0) {
+            return ResponseEntity.badRequest().build();
+        }
+        Account account = accountService.findAccountById(id);
+        return account != null ? 
+            ResponseEntity.ok(account) : 
+            ResponseEntity.notFound().build();
     }
 
     @PostMapping
     public ResponseEntity<Account> createAccount(@Valid @RequestBody Account account) {
-        return ResponseEntity.ok(accountService.createAccount(account));
+        if (account.getId() != null) {
+            return ResponseEntity.badRequest().build();
+        }
+        Account createdAccount = accountService.createAccount(account);
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdAccount);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteAccount(@PathVariable Long id) {
-        accountService.deleteAccount(id);
-        return ResponseEntity.ok().build();
+        if (id == null || id <= 0) {
+            return ResponseEntity.badRequest().build();
+        }
+        try {
+            accountService.deleteAccount(id);
+            return ResponseEntity.noContent().build();
+        } catch (Exception e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 }
