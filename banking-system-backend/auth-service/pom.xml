@@ -1,0 +1,53 @@
+<project-root>/auth-service/pom.xml
+
+<project-root>/auth-service/pom.xml
+<project>
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.banking</groupId>
+    <artifactId>auth-service</artifactId>
+    <version>1.0.0</version>
+    <packaging>jar</packaging>
+
+    <name>Auth Service</name>
+    <description>Authentication service for the banking system</description>
+
+    <properties>
+        <java.version>11</java.version>
+        <spring.boot.version>2.5.4</spring.boot.version>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
+</project>
