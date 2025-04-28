@@ -1,25 +1,18 @@
 spring:
-  application:
-    name: account-service
   datasource:
-    url: jdbc:h2:mem:banking;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
-    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:accountdb;DB_CLOSE_DELAY=-1
     username: sa
     password:
+    driver-class-name: org.h2.Driver
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: none
+    show-sql: true
   h2:
     console:
       enabled: true
-  jpa:
-    hibernate:
-      ddl-auto: update
-    show-sql: true
-
-server:
-  port: 8081
-
-logging:
-  level:
-    org.hibernate.SQL: DEBUG
-    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
-
-# Add any additional configuration properties as needed.
+      path: /h2-console
+  sql:
+    init:
+      mode: always
