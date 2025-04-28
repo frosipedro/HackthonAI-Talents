@@ -1,15 +1,14 @@
 package com.banking.account.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Positive;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 
 @Entity
 public class Account {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -24,15 +23,7 @@ public class Account {
     @Positive
     private Double balance;
 
-    public Account() {
-    }
-
-    public Account(String accountNumber, String accountType, Double balance) {
-        this.accountNumber = accountNumber;
-        this.accountType = accountType;
-        this.balance = balance;
-    }
-
+    // Getters and Setters
     public Long getId() {
         return id;
     }
