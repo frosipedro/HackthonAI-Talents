@@ -3,6 +3,7 @@ package com.banking.entities;
 import jakarta.persistence.Id;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Email;
@@ -18,6 +19,7 @@ public class Customer {
 
     @Email(message = "Email should be valid")
     @NotBlank(message = "Email is mandatory")
+    @Column(unique = true)  
     private String email;
 
     @NotBlank(message = "Birth date is mandatory")
