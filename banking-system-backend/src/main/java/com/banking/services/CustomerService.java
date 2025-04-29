@@ -2,6 +2,7 @@ package com.banking.services;
 
 import com.banking.entities.Customer;
 import com.banking.repositories.CustomerRepository;
+import com.banking.utils.exception.ValidationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,29 +22,40 @@ public class CustomerService {
     public Customer createCustomer(Customer customer) {
         Optional<Customer> existingCustomer = customerRepository.findByEmail(customer.getEmail());
         if (existingCustomer.isPresent()) {
-            throw new RuntimeException("Email is already taken");
+            throw new ValidationException("Email is already taken");
         }
         return customerRepository.save(customer);
     }
 
-    public Optional<Customer> getCustomerById(Long id) {
-        return customerRepository.findById(id);
-    }
+    public Customer getCustomerById(Long id) {
+        Optional<Customer> customer = customerRepository.findById(id);
+        if (customer.isEmpty()) {
+            throw new ValidationException("Customer not found with id " + id);
+        }
+        return customer.get();
+    }    
 
     public List<Customer> getAllCustomers() {
         return customerRepository.findAll();
     }
 
     public Customer updateCustomer(Long id, Customer customerDetails) {
-        Customer customer = customerRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Customer not found with id " + id));
-        customer.setName(customerDetails.getName());
-        customer.setEmail(customerDetails.getEmail());
-        customer.setBirthDate(customerDetails.getBirthDate());
-        return customerRepository.save(customer);
+        Optional<Customer> customer = customerRepository.findById(id);
+        if (customer.isEmpty()) {
+            throw new ValidationException("Customer not found with id " + id);
+        }
+        Customer existingCustomer = customer.get();
+        existingCustomer.setName(customerDetails.getName());
+        existingCustomer.setEmail(customerDetails.getEmail());
+        existingCustomer.setBirthDate(customerDetails.getBirthDate());
+        return customerRepository.save(existingCustomer);
     }
 
     public void deleteCustomer(Long id) {
+        Optional<Customer> customer = customerRepository.findById(id);
+        if (customer.isEmpty()) {
+            throw new ValidationException("Customer not found with id " + id);
+        }
         customerRepository.deleteById(id);
-    }
+    }    
 }
