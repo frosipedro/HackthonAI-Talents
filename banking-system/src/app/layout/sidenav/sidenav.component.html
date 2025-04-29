@@ -1,0 +1,42 @@
+<div class="sidebar" [class.collapsed]="isCollapsed">
+    <div class="sidebar-links">
+      <div class="top">
+        <div class="logo">
+          <img src="logo.png" alt="Logo">
+          <span class="logo-text" *ngIf="!isCollapsed">VamBora <small class="pequenoCinza">v.01</small></span>
+        </div>
+      </div>
+      
+      <ul class="menu">
+        <li *ngFor="let item of menuItems; let i = index" 
+            (click)="selecionarItem(i, $event)" 
+            [routerLink]="item.link" 
+            [ngClass]="{'selecionado': itemSelecionado === i}"
+            role="button" 
+            [attr.aria-label]="'Página Inicial'">
+          <mat-icon>{{ item.icon }}</mat-icon>
+          <span *ngIf="!isCollapsed">{{ item.label }}</span>
+          <mat-icon class="direita">chevron_right</mat-icon> 
+        </li>
+      </ul>
+    </div>
+  
+    <div class="user">
+      <img src="motorista.png" alt="Usuário">
+      <div class="user-info" *ngIf="!isCollapsed">
+        <span class="name">{{ nomeUsuario }}</span>
+        <br>
+        <span class="role">{{ tipoUsuario }}</span>
+      </div>
+      <button mat-icon-button [matMenuTriggerFor]="menu">
+        <mat-icon>keyboard_arrow_down</mat-icon>
+      </button>
+      
+      <mat-menu #menu="matMenu">
+        <button mat-menu-item (click)="logout()">Logout</button>
+      </mat-menu>
+    </div>    
+  
+    <div class="collapse-trigger" (click)="toggleSidebar()"></div>
+  </div>
+  
