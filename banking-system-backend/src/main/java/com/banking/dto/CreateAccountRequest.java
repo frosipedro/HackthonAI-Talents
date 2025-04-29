@@ -2,6 +2,11 @@ package com.banking.dto;
 
 import jakarta.validation.constraints.NotNull;
 
+enum AccountType {
+    C,
+    S
+}
+
 public class CreateAccountRequest {
 
     @NotNull(message = "Customer ID is mandatory")
@@ -24,6 +29,10 @@ public class CreateAccountRequest {
     }
 
     public void setAccountType(String accountType) {
+        if (accountType == null
+                || (!accountType.equals(AccountType.C.name()) && !accountType.equals(AccountType.S.name()))) {
+            throw new IllegalArgumentException("Invalid account type. Must be 'C' or 'S'.");
+        }
         this.accountType = accountType;
     }
 }
