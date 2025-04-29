@@ -1,23 +1,30 @@
 package com.banking.services;
 
 import com.banking.entities.Account;
+import com.banking.entities.Transaction;
 import com.banking.repositories.AccountRepository;
 import com.banking.repositories.CustomerRepository;
+import com.banking.repositories.TransactionRepository;
 import com.banking.utils.exception.NotFoundException;
 import com.banking.utils.exception.ValidationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
 
 @Service
 public class AccountService {
 
     private final AccountRepository accountRepository;
     private final CustomerRepository customerRepository;
+    private final TransactionRepository transactionRepository;
 
     @Autowired
-    public AccountService(AccountRepository accountRepository, CustomerRepository customerRepository) {
+    public AccountService(AccountRepository accountRepository, CustomerRepository customerRepository,
+            TransactionRepository transactionRepository) {
         this.accountRepository = accountRepository;
         this.customerRepository = customerRepository;
+        this.transactionRepository = transactionRepository;
     }
 
     public Account createAccount(Long customerId, String accountType) {
@@ -42,7 +49,17 @@ public class AccountService {
                 .orElseThrow(() -> new NotFoundException("Account with ID " + accountId + " not found."));
 
         account.setBalance(account.getBalance() + amount);
-        return accountRepository.save(account);
+        accountRepository.save(account);
+
+        // Register the transaction
+        Transaction transaction = new Transaction();
+        transaction.setAccount(account);
+        transaction.setType("D"); // Deposit
+        transaction.setAmount(amount);
+        transaction.setDate(LocalDateTime.now());
+        transactionRepository.save(transaction);
+
+        return account;
     }
 
     public Account withdraw(Long accountId, Double amount) {
@@ -56,7 +73,17 @@ public class AccountService {
         }
 
         account.setBalance(account.getBalance() - amount);
-        return accountRepository.save(account);
+        accountRepository.save(account);
+
+        // Register the transaction
+        Transaction transaction = new Transaction();
+        transaction.setAccount(account);
+        transaction.setType("W"); // Withdraw
+        transaction.setAmount(amount);
+        transaction.setDate(LocalDateTime.now());
+        transactionRepository.save(transaction);
+
+        return account;
     }
 
     private void validateTransactionAmount(Double amount) {

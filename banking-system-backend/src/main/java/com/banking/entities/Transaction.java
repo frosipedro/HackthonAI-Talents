@@ -5,35 +5,31 @@ import java.time.LocalDateTime;
 
 @Entity
 public class Transaction {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id; // Alterado de transactionId para id
+    private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "account_id") // Alterado para refletir o novo nome do campo
+    @JoinColumn(name = "account_id", nullable = false)
     private Account account;
 
-    private String type; // e.g., "DEPOSIT" or "WITHDRAW"
+    @Column(nullable = false)
+    private String type; // "D" for deposit, "W" for withdrawal
+
+    @Column(nullable = false)
     private Double amount;
+
+    @Column(nullable = false)
     private LocalDateTime date;
 
     // Getters and Setters
-
     public Long getId() {
         return id;
     }
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    // Manter compatibilidade com o código existente
-    public Long getTransactionId() {
-        return id;
-    }
-
-    public void setTransactionId(Long transactionId) {
-        this.id = transactionId;
     }
 
     public Account getAccount() {

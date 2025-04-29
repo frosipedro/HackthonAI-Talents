@@ -1,11 +1,14 @@
 package com.banking.controllers;
 
+import com.banking.dto.TransactionReportDTO;
 import com.banking.entities.Transaction;
 import com.banking.services.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -15,15 +18,13 @@ public class TransactionController {
     @Autowired
     private TransactionService transactionService;
 
-    @PostMapping
-    public ResponseEntity<Transaction> createTransaction(@RequestBody Transaction transaction) {
-        Transaction createdTransaction = transactionService.createTransaction(transaction);
-        return ResponseEntity.ok(createdTransaction);
-    }
-
-    @GetMapping("/account/{accountId}")
-    public ResponseEntity<List<Transaction>> getTransactionsByAccountId(@PathVariable Long accountId) {
-        List<Transaction> transactions = transactionService.getTransactionsByAccountId(accountId);
+    @GetMapping("/customer/{customerId}")
+    public ResponseEntity<List<TransactionReportDTO>> getTransactionsForCustomer(
+            @PathVariable Long customerId,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
+        List<TransactionReportDTO> transactions = transactionService.getTransactionsForCustomer(customerId, startDate,
+                endDate);
         return ResponseEntity.ok(transactions);
     }
 }
