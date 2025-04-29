@@ -1,11 +1,11 @@
 package com.banking.controllers;
 
 import com.banking.dto.CreateAccountRequest;
+import com.banking.dto.DepositRequest;
+import com.banking.dto.WithdrawRequest;
 import com.banking.entities.Account;
 import com.banking.services.AccountService;
-
 import jakarta.validation.Valid;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,5 +25,17 @@ public class AccountController {
     public ResponseEntity<Account> createAccount(@RequestBody @Valid CreateAccountRequest request) {
         Account createdAccount = accountService.createAccount(request.getCustomerId(), request.getAccountType());
         return ResponseEntity.ok(createdAccount);
+    }
+
+    @PostMapping("/deposit")
+    public ResponseEntity<Account> deposit(@RequestBody @Valid DepositRequest request) {
+        Account updatedAccount = accountService.deposit(request.getAccountId(), request.getAmount());
+        return ResponseEntity.ok(updatedAccount);
+    }
+
+    @PostMapping("/withdraw")
+    public ResponseEntity<Account> withdraw(@RequestBody @Valid WithdrawRequest request) {
+        Account updatedAccount = accountService.withdraw(request.getAccountId(), request.getAmount());
+        return ResponseEntity.ok(updatedAccount);
     }
 }
