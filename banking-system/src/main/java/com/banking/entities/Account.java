@@ -1,30 +1,23 @@
 package com.banking.entities;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 
 @Entity
 public class Account {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id; // Alterado de accountNumber para id
+    private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "customer_id")
-    private Customer customer;
+    @NotNull(message = "Customer ID is mandatory")
+    private Long customerId;
 
-    private String accountType;
-    private Double balance;
+    @NotNull(message = "Account type is mandatory")
+    private String accountType; // 'S' or 'C'
 
-    public Account() {
-    }
+    private Double balance = 0.0; // Default initial balance
 
-    public Account(Long id, Customer customer, String accountType, Double balance) {
-        this.id = id;
-        this.customer = customer;
-        this.accountType = accountType;
-        this.balance = balance;
-    }
-
+    // Getters and Setters
     public Long getId() {
         return id;
     }
@@ -33,21 +26,12 @@ public class Account {
         this.id = id;
     }
 
-    // Manter compatibilidade com o código existente
-    public Long getAccountNumber() {
-        return id;
+    public Long getCustomerId() {
+        return customerId;
     }
 
-    public void setAccountNumber(Long accountNumber) {
-        this.id = accountNumber;
-    }
-
-    public Customer getCustomer() {
-        return customer;
-    }
-
-    public void setCustomer(Customer customer) {
-        this.customer = customer;
+    public void setCustomerId(Long customerId) {
+        this.customerId = customerId;
     }
 
     public String getAccountType() {
