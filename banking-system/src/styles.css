@@ -5,3 +5,5 @@ body {
     --cor-3: gray;
     --cor-4: #9197B3;
   }
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
