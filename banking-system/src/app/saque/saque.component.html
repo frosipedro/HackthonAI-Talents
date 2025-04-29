@@ -1,0 +1,31 @@
+<div class="flex-container">
+    <div class="caixa-inputs">
+        <h1 class="titulo">Saque/Depósito</h1>
+
+        <p class="texto-input">Número da conta</p>
+        <mat-form-field>
+            <mat-label>Ex: 123456</mat-label>
+            <input matInput type="number" class="example-left-align">
+          </mat-form-field>
+        <p class="texto-input">Valor do saque</p>
+            <mat-form-field floatLabel="always">
+                <mat-label>Valor</mat-label>
+                <input matInput type="number" class="example-right-align" placeholder="0" />
+                <span matTextPrefix>$&nbsp;</span>
+                <span matTextSuffix>.00</span>
+              </mat-form-field>
+          <p class="texto-input">Tipo da Transação</p>
+          <mat-form-field>
+            <mat-label>Selecione...</mat-label>
+            <mat-select>
+              <mat-option value="one">Depósito</mat-option>
+              <mat-option value="two">Saque</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <a class="botao-confirma" style="background-color: var(--cor-2);" mat-flat-button href="https://www.google.com/" target="_blank">Confirmar</a>
+          <div class="msg-final"></div>
+    </div>
+</div>
+
+

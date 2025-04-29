@@ -1,0 +1,84 @@
+:host {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  body {
+    --cor-1: white;
+    --cor-2: #57429D;
+    --cor-3: gray;
+    --cor-4: #9197B3;
+  }
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+
+.flex-container {
+    flex:1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+    min-height: 100vh;
+}
+
+.caixa-inputs {
+    padding-right: 30px;
+    padding-left: 30px;
+    padding-bottom: 20px;
+    padding-top: 10px;
+    border-radius: 7px;
+    background-color: white;
+    border: 1px solid #ccc;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    width: 350px;
+    box-shadow: 5px 5px 10px var(--cor-4);
+}
+
+.texto-input{
+    font-weight: bold;
+    color: var(--cor-2);
+    font-size: large;
+}
+
+.botao-confirma{
+    background-color: var(--cor-2);
+    font-size: large;
+}
+
+.titulo{
+    color: var(--cor-2);
+    font-weight: bold;
+    text-align: center;
+}
+
+
+.example-right-align {
+    text-align: right;
+  }
+  
+  input.example-right-align::-webkit-outer-spin-button,
+  input.example-right-align::-webkit-inner-spin-button {
+    display: none;
+  }
+  
+  input.example-right-align {
+    -moz-appearance: textfield;
+  }
+
+  .example-left-align {
+    text-align: left;
+  }
+  
+  input.example-left-align::-webkit-outer-spin-button,
+  input.example-left-align::-webkit-inner-spin-button {
+    display: none;
+  }
+  
+  input.example-left-align {
+    -moz-appearance: textfield;
+  }
