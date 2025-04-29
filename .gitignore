@@ -1,0 +1,57 @@
+@"
+# Java
+*.class
+*.jar
+*.war
+*.ear
+
+# Log files
+*.log
+
+# Compiled files
+target/
+bin/
+build/
+
+# IDEs
+# IntelliJ
+.idea/
+*.iml
+*.ipr
+*.iws
+
+# Eclipse
+.project
+.classpath
+.settings/
+.metadata/
+
+# VS Code
+.vscode/
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Test output
+test-output/
+
+# Maven
+.mvn/
+dependency-reduced-pom.xml
+buildNumber.properties
+release.properties
+
+# Gradle
+.gradle/
+build/
+
+# Temporary files
+*.tmp
+*.bak
+*.swp
+*.swo
+
+# OneDrive temporary files
+~$*
+"@ > .gitignore

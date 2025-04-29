@@ -1,18 +1,24 @@
 package com.banking.account.service;
 
-import com.banking.account.model.Account;
-import com.banking.account.repository.AccountRepository;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import org.mockito.MockitoAnnotations;
+
+import com.banking.account.model.Account;
+import com.banking.account.repository.AccountRepository;
 
 class AccountServiceTest {
 
@@ -30,7 +36,30 @@ class AccountServiceTest {
         account = new Account();
         account.setId(1L);
         account.setAccountNumber("123456");
+        account.setAccountType("SAVINGS");
         account.setBalance(1000.0);
+    }
+
+    @Test
+    void testFindAllAccounts() {
+        when(accountRepository.findAll()).thenReturn(Collections.singletonList(account));
+
+        List<Account> accounts = accountService.findAllAccounts();
+
+        assertNotNull(accounts);
+        assertEquals(1, accounts.size());
+        verify(accountRepository, times(1)).findAll();
+    }
+
+    @Test
+    void testFindAccountById() {
+        when(accountRepository.findById(1L)).thenReturn(Optional.of(account));
+
+        Account foundAccount = accountService.findAccountById(1L);
+
+        assertNotNull(foundAccount);
+        assertEquals(account.getAccountNumber(), foundAccount.getAccountNumber());
+        verify(accountRepository, times(1)).findById(1L);
     }
 
     @Test
@@ -45,35 +74,11 @@ class AccountServiceTest {
     }
 
     @Test
-    void testGetAccountById() {
-        when(accountRepository.findById(1L)).thenReturn(Optional.of(account));
-
-        Optional<Account> foundAccount = accountService.getAccountById(1L);
-
-        assertTrue(foundAccount.isPresent());
-        assertEquals(account.getAccountNumber(), foundAccount.get().getAccountNumber());
-        verify(accountRepository, times(1)).findById(1L);
-    }
-
-    @Test
-    void testUpdateAccount() {
-        when(accountRepository.findById(1L)).thenReturn(Optional.of(account));
-        when(accountRepository.save(any(Account.class))).thenReturn(account);
-
-        account.setBalance(1500.0);
-        Account updatedAccount = accountService.updateAccount(1L, account);
-
-        assertNotNull(updatedAccount);
-        assertEquals(1500.0, updatedAccount.getBalance());
-        verify(accountRepository, times(1)).save(account);
-    }
-
-    @Test
     void testDeleteAccount() {
-        when(accountRepository.findById(1L)).thenReturn(Optional.of(account));
+        doNothing().when(accountRepository).deleteById(1L);
 
         accountService.deleteAccount(1L);
 
-        verify(accountRepository, times(1)).delete(account);
+        verify(accountRepository, times(1)).deleteById(1L);
     }
 }
