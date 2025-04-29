@@ -11,7 +11,7 @@ import jakarta.validation.constraints.Email;
 public class Customer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id; // Alterado de customerId para id
+    private Long id;
 
     @NotBlank(message = "Name is mandatory")
     private String name;
@@ -24,22 +24,12 @@ public class Customer {
     private String birthDate; // Format: YYYY-MM-DD
 
     // Getters and Setters
-
     public Long getId() {
         return id;
     }
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    // Manter compatibilidade com o código existente
-    public Long getCustomerId() {
-        return id;
-    }
-
-    public void setCustomerId(Long customerId) {
-        this.id = customerId;
     }
 
     public String getName() {
