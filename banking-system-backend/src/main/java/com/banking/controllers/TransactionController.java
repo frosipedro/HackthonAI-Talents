@@ -16,21 +16,34 @@ import java.util.List;
 @RequestMapping("/api/transactions")
 public class TransactionController {
 
+    private final TransactionService transactionService;
+
     @Autowired
-    private TransactionService transactionService;
+    public TransactionController(TransactionService transactionService) {
+        this.transactionService = transactionService;
+    }
 
     @GetMapping("/customer/{customerId}")
     public ResponseEntity<List<TransactionReportDTO>> getTransactionsForCustomer(
             @PathVariable Long customerId,
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
+            @RequestParam(required = true) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate startDate,
+            @RequestParam(required = true) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate endDate) {
+
+        // Validação das datas
+        if (startDate == null || endDate == null) {
+            throw new ValidationException("Start date and end date are required");
+        }
 
         if (startDate.isAfter(endDate)) {
             throw new ValidationException(MessageConstants.INVALID_DATE_RANGE);
         }
 
-        List<TransactionReportDTO> transactions = transactionService.getTransactionsForCustomer(customerId, startDate,
-                endDate);
+        List<TransactionReportDTO> transactions = transactionService.getTransactionsForCustomer(
+                customerId,
+                startDate,
+                endDate
+        );
+
         return ResponseEntity.ok(transactions);
     }
 }
