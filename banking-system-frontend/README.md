@@ -1,57 +1,49 @@
-# Banking System Frontend
+# BankingSystemFrontend
+## Introduction
 
-## Overview
+The Banking System Frontend is a web-based application designed to provide an intuitive and user-friendly interface for managing banking operations. The system includes several key screens, such as:
 
-A modern banking system frontend built with [Angular CLI](https://github.com/angular/angular-cli) version 19.2.9.
+- **Transaction Reports**: Displays an overview of account balances, recent transactions, and key metrics.
+- **Transactions Screen**: Enables users to view, create, and manage financial transactions.
+- **Account Management**: Provides tools for managing user profiles, account settings, and linked accounts.
 
-## 📁 Project Structure
+### Architecture
 
-```
-banking-system-frontend/
-├── src/
-│   ├── app/                # Main components and modules
-│   ├── assets/             # Static assets
-│   ├── environments/       # Environment configs
-│   ├── index.html
-│   └── styles.css
-├── angular.json
-├── package.json
-└── README.md
-```
+This frontend application is built using Angular, a powerful framework for building dynamic and responsive web applications. The architecture follows a modular design, with features encapsulated into reusable components and services. Key architectural highlights include:
 
-## ✨ Features
+- **Component-Based Structure**: Each screen and feature is implemented as a standalone component, ensuring maintainability and scalability.
+- **Service-Oriented Communication**: Shared services handle data retrieval and communication with the backend API.
+- **Routing**: Angular's Router is used to manage navigation between screens seamlessly.
+- **State Management**: The application leverages Angular's built-in tools for managing state and data flow efficiently.
 
-- User-friendly interface for banking operations
-- Modular and scalable Angular architecture
-- Ready for production builds and testing
-- Unit and end-to-end test support
+This architecture ensures a robust, maintainable, and scalable frontend system that meets modern web application standards.
+This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.2.9.
 
-## 🚀 Requirements
+## Development server
 
-- [Node.js](https://nodejs.org/) >= 18.x
-- [Angular CLI](https://angular.dev/tools/cli) >= 19.x
-
-## ⚙️ Installation
-
-Clone the repository and install dependencies:
-
-```bash
-git clone https://github.com/your-username/your-repo.git
-cd banking-system-frontend
-npm install
-```
-
-## 🖥️ Development
-
-To start the development server:
+To start a local development server, run:
 
 ```bash
 ng serve
 ```
 
-Open [http://localhost:4200/](http://localhost:4200/) in your browser.
+Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
 
-## 🏗️ Production Build
+## Code scaffolding
+
+Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+
+```bash
+ng generate component component-name
+```
+
+For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+
+```bash
+ng generate --help
+```
+
+## Building
 
 To build the project run:
 
@@ -61,37 +53,24 @@ ng build
 
 This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
 
-## 🧪 Testing
+## Running unit tests
 
-### Unit Tests
+To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
 
 ```bash
 ng test
 ```
 
-### End-to-End Tests
+## Running end-to-end tests
+
+For end-to-end (e2e) testing, run:
 
 ```bash
 ng e2e
 ```
 
-> Note: Choose and configure an e2e framework as needed.
+Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
 
-## 🤝 Contributing
+## Additional Resources
 
-Contributions are welcome! To contribute:
-
-1. Fork this repository
-2. Create a branch (`git checkout -b feature/your-feature`)
-3. Commit your changes (`git commit -am 'feat: your feature'`)
-4. Push to the branch (`git push origin feature/your-feature`)
-5. Open a Pull Request
-
-## 📚 Resources
-
-- [Angular Documentation](https://angular.dev/docs)
-- [Angular CLI](https://angular.dev/tools/cli)
-
-## 📝 License
-
-This project is licensed under the MIT License. See the LICENSE file for details.
+For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.

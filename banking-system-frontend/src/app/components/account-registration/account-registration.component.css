@@ -1,0 +1,50 @@
+form {
+    background-color: var(--cor-1); /* Fundo branco */
+    color: var(--cor-2); /* Texto com a cor principal */
+    padding: 20px;
+    border-radius: 8px;
+    max-width: 400px;
+    margin: 0 auto;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+  }
+  
+  form div {
+    margin-bottom: 15px;
+  }
+  
+  label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: var(--cor-3); /* Cinza */
+  }
+  
+  input,
+  select {
+    width: 388px;
+    padding: 6px;
+    border: 1px solid var(--cor-4); /* Borda com cor secundária */
+    border-radius: 4px;
+    font-size: 16px;
+  }
+  
+  button {
+    background-color: var(--cor-2); /* Cor principal */
+    color: var(--cor-1); /* Texto branco */
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+    width: 100%;
+  }
+  
+  button:hover {
+    background-color: var(--cor-4); /* Cor secundária ao passar o mouse */
+  }
+  
+  button:disabled {
+    background-color: var(--cor-3); /* Cinza para botões desativados */
+    cursor: not-allowed;
+  }

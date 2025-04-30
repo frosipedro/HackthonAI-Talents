@@ -1,0 +1,88 @@
+.transaction-reports {
+    padding: 20px;
+    background-color: var(--cor-1);
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    margin: 20px;
+}
+
+.transaction-reports h2 {
+    color: var(--cor-2);
+    margin-bottom: 20px;
+    font-size: 24px;
+}
+
+.transaction-reports form {
+    margin-bottom: 20px;
+}
+
+.transaction-reports input {
+    padding: 8px 12px;
+    border: 1px solid var(--cor-4);
+    border-radius: 4px;
+    margin-right: 10px;
+    width: 200px;
+}
+
+.transaction-reports button {
+    background-color: var(--cor-2);
+    color: var(--cor-1);
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.transaction-reports button:hover {
+    background-color: #443488;
+}
+
+.transaction-reports table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    background-color: var(--cor-1);
+}
+
+.transaction-reports th, 
+.transaction-reports td {
+    border: 1px solid var(--cor-4);
+    padding: 12px;
+    text-align: left;
+}
+
+.transaction-reports th {
+    background-color: var(--cor-2);
+    color: var(--cor-1);
+    font-weight: 500;
+}
+
+.transaction-reports tr:nth-child(even) {
+    background-color: #f8f9fa;
+}
+
+.transaction-reports tr:hover {
+    background-color: #f1f1f4;
+}
+
+.transaction-reports h3 {
+    color: var(--cor-2);
+    margin: 20px 0;
+    font-size: 20px;
+}
+
+.transaction-reports p {
+    color: var(--cor-3);
+    margin-top: 15px;
+}
+
+
+.transaction-reports div p {
+    color: var(--cor-3);
+    text-align: center;
+    padding: 20px;
+    background-color: #f8f9fa;
+    border-radius: 4px;
+    margin-top: 20px;
+}

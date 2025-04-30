@@ -5,7 +5,6 @@ import com.banking.services.CustomerService;
 import com.banking.utils.constants.MessageConstants;
 import com.banking.utils.exception.NotFoundException;
 import com.banking.utils.exception.ValidationException;
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -103,7 +102,6 @@ public class CustomerController {
         List<Customer> customers = customerService.getAllCustomers();
         return ResponseEntity.ok(customers);
     }
-
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteCustomer(@PathVariable Long id) {

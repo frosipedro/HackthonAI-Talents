@@ -1,0 +1,26 @@
+<form (ngSubmit)="onSubmit()" [formGroup]="accountForm">
+  <div>
+    <label for="accountNumber">Número da Conta:</label>
+    <input type="text" id="accountNumber" formControlName="accountNumber">
+  </div>
+  
+  <div>
+    <label for="customerId">ID do Cliente:</label>
+    <input type="text" id="customerId" formControlName="customerId">
+  </div>
+  
+  <div>
+    <label for="accountType">Tipo da Conta:</label>
+    <select id="accountType" formControlName="accountType">
+      <option value="savings">Poupança</option>
+      <option value="checking">Corrente</option>
+    </select>
+  </div>
+  
+  <div>
+    <label for="initialBalance">Saldo Inicial:</label>
+    <input type="number" id="initialBalance" formControlName="initialBalance">
+  </div>
+  
+  <button type="submit">Cadastrar Conta</button>
+</form>

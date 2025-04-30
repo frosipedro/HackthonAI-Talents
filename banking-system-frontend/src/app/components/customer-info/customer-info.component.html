@@ -1,0 +1,27 @@
+<div class="customer-info">
+  <h2>Customer Information</h2>
+
+  <form (submit)="fetchCustomerInfo()">
+    <label for="customerId">Customer ID:</label>
+    <input type="text" id="customerId" [(ngModel)]="customerId" name="customerId" required>
+    <button type="submit">Search</button>
+  </form>
+
+  <div *ngIf="customer">
+    <p><strong>ID:</strong> {{ customer?.id }}</p>
+    <p><strong>Name:</strong> {{ customer?.fullName }}</p>
+    <p><strong>Email:</strong> {{ customer?.email }}</p>
+    <p><strong>Date of Birth:</strong> {{ customer?.dateOfBirth }}</p>
+    
+    <h3>Accounts</h3>
+    <ul>
+      <li *ngFor="let account of customer.accounts">
+        <p><strong>Account Number:</strong> {{ account.accountNumber }}</p>
+        <p><strong>Account Type:</strong> {{ account.accountType }}</p>
+        <p><strong>Balance:</strong> {{ account.balance }}</p>
+      </li>
+    </ul>
+  </div>
+
+
+</div>
