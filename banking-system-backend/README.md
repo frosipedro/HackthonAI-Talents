@@ -291,6 +291,22 @@ banking-system
 - **Transaction Endpoints**
   - `GET /transactions/customer/{id}?startDate={startDate}&endDate={endDate}`: Retrieve transactions by account ID.
 
+   Request:
+   ```
+   No content
+   ```
+   Response:
+   ```
+   [
+    {
+      "date": "2025-04-30",
+      "accountType": "C",
+      "transactionType": "D",
+      "amount": 100000.0
+    }
+   ]
+   ```
+
 ### Database Configuration
 
 - **Database**
