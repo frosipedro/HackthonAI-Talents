@@ -51,17 +51,44 @@ public class CustomerController {
         }
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updateCustomer(@PathVariable Long id, @RequestBody Customer customerDetails) {
+        try {
+            if (customerDetails.getEmail() == null || customerDetails.getName() == null) {
+                Map<String, String> response = new HashMap<>();
+                response.put("error", MessageConstants.EMAIL_REQUIRED + " & " + MessageConstants.NAME_REQUIRED);
+                return ResponseEntity.badRequest().body(response);
+            }
+
+            Customer updatedCustomer = customerService.updateCustomer(id, customerDetails);
+            return ResponseEntity.ok(updatedCustomer);
+
+        } catch (ValidationException e) {
+            return ResponseEntity.badRequest()
+                    .body(Collections.singletonMap("error", e.getMessage()));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Collections.singletonMap("error",
+                            String.format(MessageConstants.INTERNAL_SERVER_ERROR, e.getMessage())));
+        }
+    }
+
     @PatchMapping("/{id}")
     public ResponseEntity<?> updateCustomerPartial(@PathVariable Long id, @RequestBody Customer customerDetails) {
         try {
             Customer updatedCustomer = customerService.updateCustomerPartial(id, customerDetails);
             return ResponseEntity.ok(updatedCustomer);
+
         } catch (ValidationException e) {
             return ResponseEntity.badRequest()
                     .body(Collections.singletonMap("error", e.getMessage()));
         } catch (NotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(Collections.singletonMap("error", e.getMessage()));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Collections.singletonMap("error",
+                            String.format(MessageConstants.INTERNAL_SERVER_ERROR, e.getMessage())));
         }
     }
 
@@ -77,12 +104,6 @@ public class CustomerController {
         return ResponseEntity.ok(customers);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<Customer> updateCustomer(@PathVariable Long id,
-                                                   @Valid @RequestBody Customer customerDetails) {
-        Customer updatedCustomer = customerService.updateCustomer(id, customerDetails);
-        return ResponseEntity.ok(updatedCustomer);
-    }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteCustomer(@PathVariable Long id) {
