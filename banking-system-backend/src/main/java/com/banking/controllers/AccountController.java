@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/accounts")
 public class AccountController {
@@ -37,5 +39,11 @@ public class AccountController {
     public ResponseEntity<Account> withdraw(@RequestBody @Valid WithdrawRequest request) {
         Account updatedAccount = accountService.withdraw(request.getAccountId(), request.getAmount());
         return ResponseEntity.ok(updatedAccount);
+    }
+
+    @GetMapping("/customer/{customerId}")
+    public ResponseEntity<List<Account>> getAccountsByCustomerId(@PathVariable Long customerId) {
+        List<Account> accounts = accountService.getAccountsByCustomerId(customerId);
+        return ResponseEntity.ok(accounts);
     }
 }

@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 public class AccountService {
@@ -84,6 +85,13 @@ public class AccountService {
         transactionRepository.save(transaction);
 
         return account;
+    }
+
+    public List<Account> getAccountsByCustomerId(Long customerId) {
+        if (!customerRepository.existsById(customerId)) {
+            throw new NotFoundException("Customer not found with id " + customerId);
+        }
+        return accountRepository.findByCustomerId(customerId);
     }
 
     private void validateTransactionAmount(Double amount) {
