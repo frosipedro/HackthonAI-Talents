@@ -27,7 +27,6 @@ public class TransactionService {
 
     public List<TransactionReportDTO> getTransactionsForCustomer(Long customerId, LocalDate startDate,
             LocalDate endDate) {
-        // Buscar contas do cliente
         List<Account> accounts = accountRepository.findAll()
                 .stream()
                 .filter(account -> account.getCustomerId().equals(customerId))
@@ -37,7 +36,6 @@ public class TransactionService {
             throw new NotFoundException("No accounts found for customer ID " + customerId);
         }
 
-        // Buscar transações para as contas do cliente no intervalo de datas
         List<Transaction> transactions = transactionRepository.findAll()
                 .stream()
                 .filter(transaction -> accounts.contains(transaction.getAccount()) &&
@@ -45,7 +43,6 @@ public class TransactionService {
                         !transaction.getDate().toLocalDate().isAfter(endDate))
                 .collect(Collectors.toList());
 
-        // Mapear transações para o DTO
         return transactions.stream()
                 .map(transaction -> new TransactionReportDTO(
                         transaction.getDate().toLocalDate().toString(), // Formatar data como YYYY/MM/DD

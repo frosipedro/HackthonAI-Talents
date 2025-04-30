@@ -10,10 +10,10 @@ public class Account {
     @SequenceGenerator(name = "account_sequence", sequenceName = "account_seq", allocationSize = 1)
     private Long id;
 
-    @NotNull(message = "Customer ID is mandatory")
+    @NotNull(message = "Customer ID is required")
     private Long customerId;
 
-    @NotNull(message = "Account type is mandatory")
+    @NotNull(message = "Account type is required")
     private String accountType; // 'S' or 'C'
 
     private Double balance = 0.0; // Default initial balance

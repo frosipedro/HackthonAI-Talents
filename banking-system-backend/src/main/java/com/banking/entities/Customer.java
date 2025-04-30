@@ -12,18 +12,18 @@ public class Customer {
     @SequenceGenerator(name = "customer_sequence", sequenceName = "customer_seq", allocationSize = 1)
     private Long id;
 
-    @NotBlank(message = "Name is mandatory")
+    @NotBlank(message = "Name is required")
     private String name;
 
     @Email(message = "Email should be valid")
-    @NotBlank(message = "Email is mandatory")
+    @NotBlank(message = "Email is required")
     @Column(unique = true)  
     private String email;
 
-    @NotBlank(message = "Birth date is mandatory")
+    @NotBlank(message = "Birth date is required")
     private String birthDate; // Format: YYYY-MM-DD
 
-    @NotBlank(message = "CPF is mandatory")
+    @NotBlank(message = "CPF is required")
     @Column(unique = true)
     @Pattern(regexp = "^\\d{11}$", message = "CPF must have 11 digits")
     private String cpf;

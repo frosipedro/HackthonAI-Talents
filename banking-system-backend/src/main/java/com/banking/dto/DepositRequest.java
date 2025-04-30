@@ -4,10 +4,10 @@ import jakarta.validation.constraints.NotNull;
 
 public class DepositRequest {
 
-    @NotNull(message = "Account ID is mandatory")
+    @NotNull(message = "Account ID is required")
     private Long accountId;
 
-    @NotNull(message = "Amount is mandatory")
+    @NotNull(message = "Amount is required")
     private Double amount;
 
     // Getters and Setters
