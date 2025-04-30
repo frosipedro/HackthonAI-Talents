@@ -1,10 +1,10 @@
-# Banking System
+# Banking System Backend
 
 ## Overview
 
 This project simulates a banking system migrated from COBOL to a modern Java Spring Boot application. It includes functionalities for managing customers, accounts, and transactions, utilizing an H2 in-memory database for data storage.
 
-## Project Structure
+## 📁 Project Structure
 
 ```
 banking-system
@@ -64,12 +64,12 @@ banking-system
 
 ## Getting Started
 
-### Prerequisites
+### 🚀 Requirements
 
 - Java 21
 - Maven 3.9.9
 
-### Running the Application
+### ⚙️ Running the Application
 
 1. Clone the repository:
    ```
@@ -91,7 +91,7 @@ banking-system
    mvn spring-boot:run
    ```
 
-### API Endpoints
+### 🖥️ API Endpoints
 
 - **Base URL**
   - `http://localhost:8080/api`
@@ -300,20 +300,30 @@ banking-system
    ]
    ```
 
-### Database Configuration
+### 🛠️ Database Configuration
 
 - **Database**
   - `http://localhost:8080/h2-console`
 
 The application uses an H2 in-memory database. The configuration can be found in `src/main/resources/application.properties`.
 
-### Testing
+### 🧪 Testing
 
 Unit tests are included for controllers and services. To run the tests, use:
 ```
 mvn test
 ```
 
-## License
+## 🤝 Contributing
+
+Contributions are welcome! To contribute:
+
+1. Fork this repository
+2. Create a branch (`git checkout -b feature/your-feature`)
+3. Commit your changes (`git commit -am 'feat: your feature'`)
+4. Push to the branch (`git push origin feature/your-feature`)
+5. Open a Pull Request
+
+## 📝 License
 
 This project is licensed under the MIT License. See the LICENSE file for details.
