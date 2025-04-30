@@ -20,9 +20,8 @@ export class SidenavComponent {
      { label: 'Home', icon: 'home', link: '/tela-principal' },
      { label: 'Registrar', icon: 'person_add', link: '/formulario-cliente' },
      { label: 'Abrir conta', icon: 'savings', link: '/abrirconta' },
-     { label: 'Depositar', icon: 'currency_exchange', link: '/minhascaronas' },
-     { label: 'Sacar', icon: 'payments', link: '/help' },
-     { label: 'Relatóios', icon: 'analytics', link: '/minhascaronas' },
+     { label: 'Sacar/Depositar', icon: 'currency_exchange', link: '/saque' },
+     { label: 'Relatórios', icon: 'analytics', link: '/relatorio-transacoes' },
    ];
  
    // Método para alternar o estado do menu (colapsado/expandido)

@@ -1,0 +1,94 @@
+.container {
+    padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  
+  h1 {
+    color: var(--cor-2);
+    margin-bottom: 30px;
+    text-align: left;
+  }
+  
+  .search-form {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 20px;
+    margin-bottom: 30px;
+    width: 100%;
+    max-width: 800px;
+  }
+  
+  mat-form-field {
+    flex: 1;
+    min-width: 300px;
+  }
+  
+  .search-button {
+    height: 56px;
+    min-width: 150px;
+  }
+  
+  .results-container {
+    margin-top: 20px;
+    background: var(--cor-1);
+    border-radius: 8px;
+    box-shadow: 0 2px 4px var(--cor-3);
+  }
+  
+  table {
+    width: 100%;
+  }
+  
+  .mat-column-type {
+    width: 30%;
+  }
+  
+  .mat-column-amount {
+    width: 30%;
+  }
+  
+  .mat-column-date {
+    width: 40%;
+  }
+  
+  .summary {
+    padding: 10px 30px;
+    color: var(--cor-1);
+    background-color: var(--cor-2);
+    border-radius: 0 0 8px 8px;
+    text-align: end;
+  }
+  
+  .actions {
+    margin-top: 20px;
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .mat-mdc-row:hover {
+    background-color: var(--cor-1);
+  }
+
+  .mat-label {
+    color: var(--cor-2);
+  }
+  
+  .mat-stroked-button {
+    background-color: black;
+  }
+
+  .search-button {
+    color: var(--cor-1) !important;              
+    background-color: var(--cor-2);   
+  }
+  
+  .search-button:hover {
+    background-color: var(--cor-4);  
+  }
+
+  .results-container th {
+    background-color: var(--cor-2);
+    color: var(--cor-1);
+  }
