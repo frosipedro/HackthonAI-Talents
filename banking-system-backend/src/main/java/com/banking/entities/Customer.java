@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 
 @Entity
 public class Customer {
@@ -21,6 +22,7 @@ public class Customer {
     private String email;
 
     @NotBlank(message = "Birth date is required")
+
     private String birthDate; // Format: YYYY-MM-DD
 
     @NotBlank(message = "CPF is required")

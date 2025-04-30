@@ -12,7 +12,9 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/customers")
@@ -29,15 +31,23 @@ public class CustomerController {
     @PostMapping
     public ResponseEntity<?> createCustomer(@RequestBody Customer customer) {
         try {
-            if (customer.getEmail() == null || customer.getName() == null || customer.getBirthDate() == null) {
-                return ResponseEntity.badRequest()
-                        .body(Collections.singletonMap("error", "Missing required fields"));
+            if (customer.getEmail() == null || customer.getName() == null) {
+                Map<String, String> response = new HashMap<>();
+                response.put("error", "Nome e email são obrigatórios");
+                return ResponseEntity.badRequest().body(response);
             }
+
             Customer createdCustomer = customerService.createCustomer(customer);
             return ResponseEntity.status(HttpStatus.CREATED).body(createdCustomer);
+
         } catch (ValidationException e) {
-            return ResponseEntity.badRequest()
-                    .body(Collections.singletonMap("error", e.getMessage()));
+            Map<String, String> response = new HashMap<>();
+            response.put("error", e.getMessage());
+            return ResponseEntity.badRequest().body(response);
+        } catch (Exception e) {
+            Map<String, String> response = new HashMap<>();
+            response.put("error", "Erro interno do servidor: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
         }
     }
 
