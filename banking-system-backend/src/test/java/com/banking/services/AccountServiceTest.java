@@ -109,9 +109,83 @@ class AccountServiceTest {
     }
 
     @Test
-    void deposit_InvalidAmount() {
+    void deposit_NegativeAmount_ConvertedToPositive() {
+        Double initialBalance = 1000.0;
+        Double depositAmount = -500.0;
+
+        when(accountRepository.findById(1L)).thenReturn(Optional.of(testAccount));
+        when(accountRepository.save(any(Account.class))).thenAnswer(invocation -> {
+            Account savedAccount = invocation.getArgument(0);
+            testAccount.setBalance(savedAccount.getBalance());
+            return testAccount;
+        });
+
+        Account result = accountService.deposit(1L, depositAmount);
+
+        assertNotNull(result);
+        assertEquals(initialBalance + Math.abs(depositAmount), result.getBalance());
+        verify(accountRepository).save(any(Account.class));
+        verify(transactionRepository).save(any(Transaction.class));
+    }
+
+    @Test
+    void deposit_AmountTooHigh_ThrowsException() {
+        Double depositAmount = 1000000.0;
+
         assertThrows(ValidationException.class, () -> {
-            accountService.deposit(1L, -100.0);
+            accountService.deposit(1L, depositAmount);
+        });
+
+        verify(accountRepository, never()).save(any(Account.class));
+        verify(transactionRepository, never()).save(any(Transaction.class));
+    }
+
+    @Test
+    void deposit_NullAmount_ThrowsException() {
+        assertThrows(ValidationException.class, () -> {
+            accountService.deposit(1L, null);
+        });
+
+        verify(accountRepository, never()).save(any(Account.class));
+        verify(transactionRepository, never()).save(any(Transaction.class));
+    }
+
+    @Test
+    void withdraw_NegativeAmount_ConvertedToPositive() {
+        Double initialBalance = 1000.0;
+        Double withdrawAmount = -500.0;
+
+        when(accountRepository.findById(1L)).thenReturn(Optional.of(testAccount));
+        when(accountRepository.save(any(Account.class))).thenAnswer(invocation -> {
+            Account savedAccount = invocation.getArgument(0);
+            testAccount.setBalance(savedAccount.getBalance());
+            return testAccount;
+        });
+
+        Account result = accountService.withdraw(1L, withdrawAmount);
+
+        assertNotNull(result);
+        assertEquals(initialBalance - Math.abs(withdrawAmount), result.getBalance());
+        verify(accountRepository).save(any(Account.class));
+        verify(transactionRepository).save(any(Transaction.class));
+    }
+
+    @Test
+    void withdraw_AmountTooHigh_ThrowsException() {
+        Double withdrawAmount = 1000000.0;
+
+        assertThrows(ValidationException.class, () -> {
+            accountService.withdraw(1L, withdrawAmount);
+        });
+
+        verify(accountRepository, never()).save(any(Account.class));
+        verify(transactionRepository, never()).save(any(Transaction.class));
+    }
+
+    @Test
+    void withdraw_NullAmount_ThrowsException() {
+        assertThrows(ValidationException.class, () -> {
+            accountService.withdraw(1L, null);
         });
 
         verify(accountRepository, never()).save(any(Account.class));
@@ -160,16 +234,6 @@ class AccountServiceTest {
             accountService.withdraw(1L, 500.0);
         });
 
-        verify(transactionRepository, never()).save(any(Transaction.class));
-    }
-
-    @Test
-    void withdraw_InvalidAmount() {
-        assertThrows(ValidationException.class, () -> {
-            accountService.withdraw(1L, 0.0);
-        });
-
-        verify(accountRepository, never()).save(any(Account.class));
         verify(transactionRepository, never()).save(any(Transaction.class));
     }
 
