@@ -2,6 +2,7 @@ package com.banking.controllers;
 
 import com.banking.entities.Customer;
 import com.banking.services.CustomerService;
+import com.banking.utils.constants.MessageConstants;
 import com.banking.utils.exception.NotFoundException;
 import com.banking.utils.exception.ValidationException;
 import jakarta.validation.Valid;
@@ -33,7 +34,7 @@ public class CustomerController {
         try {
             if (customer.getEmail() == null || customer.getName() == null) {
                 Map<String, String> response = new HashMap<>();
-                response.put("error", "Nome e email são obrigatórios");
+                response.put("error", MessageConstants.EMAIL_REQUIRED + " & " + MessageConstants.NAME_REQUIRED);
                 return ResponseEntity.badRequest().body(response);
             }
 
@@ -41,13 +42,12 @@ public class CustomerController {
             return ResponseEntity.status(HttpStatus.CREATED).body(createdCustomer);
 
         } catch (ValidationException e) {
-            Map<String, String> response = new HashMap<>();
-            response.put("error", e.getMessage());
-            return ResponseEntity.badRequest().body(response);
+            return ResponseEntity.badRequest()
+                    .body(Collections.singletonMap("error", e.getMessage()));
         } catch (Exception e) {
-            Map<String, String> response = new HashMap<>();
-            response.put("error", "Erro interno do servidor: " + e.getMessage());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Collections.singletonMap("error",
+                            String.format(MessageConstants.INTERNAL_SERVER_ERROR, e.getMessage())));
         }
     }
 
@@ -68,20 +68,20 @@ public class CustomerController {
     @GetMapping("/{id}")
     public ResponseEntity<Customer> getCustomerById(@PathVariable Long id) {
         Customer customer = customerService.getCustomerById(id);
-        return ResponseEntity.ok().body(customer);
+        return ResponseEntity.ok(customer);
     }
 
     @GetMapping
     public ResponseEntity<List<Customer>> getAllCustomers() {
         List<Customer> customers = customerService.getAllCustomers();
-        return ResponseEntity.ok().body(customers);
+        return ResponseEntity.ok(customers);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<Customer> updateCustomer(@PathVariable Long id,
-            @Valid @RequestBody Customer customerDetails) {
+                                                   @Valid @RequestBody Customer customerDetails) {
         Customer updatedCustomer = customerService.updateCustomer(id, customerDetails);
-        return ResponseEntity.ok().body(updatedCustomer);
+        return ResponseEntity.ok(updatedCustomer);
     }
 
     @DeleteMapping("/{id}")

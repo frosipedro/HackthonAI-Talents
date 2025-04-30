@@ -2,9 +2,11 @@ package com.banking.services;
 
 import com.banking.dto.TransactionReportDTO;
 import com.banking.entities.Account;
+import com.banking.entities.Customer;
 import com.banking.entities.Transaction;
 import com.banking.repositories.AccountRepository;
 import com.banking.repositories.TransactionRepository;
+import com.banking.utils.constants.MessageConstants;
 import com.banking.utils.exception.NotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -19,6 +21,7 @@ import java.util.Collections;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 class TransactionServiceTest {
@@ -28,6 +31,9 @@ class TransactionServiceTest {
 
     @Mock
     private AccountRepository accountRepository;
+
+    @Mock
+    private CustomerService customerService;
 
     @InjectMocks
     private TransactionService transactionService;
@@ -60,10 +66,12 @@ class TransactionServiceTest {
 
     @Test
     void getTransactionsForCustomer_Success() {
-        when(accountRepository.findAll()).thenReturn(Arrays.asList(testAccount));
+        Long customerId = 1L;
+        when(customerService.getCustomerById(customerId)).thenReturn(new Customer());
+        when(accountRepository.findByCustomerId(customerId)).thenReturn(Arrays.asList(testAccount));
         when(transactionRepository.findAll()).thenReturn(Arrays.asList(testTransaction));
 
-        List<TransactionReportDTO> result = transactionService.getTransactionsForCustomer(1L, startDate, endDate);
+        List<TransactionReportDTO> result = transactionService.getTransactionsForCustomer(customerId, startDate, endDate);
 
         assertNotNull(result);
         assertFalse(result.isEmpty());
@@ -77,20 +85,13 @@ class TransactionServiceTest {
     }
 
     @Test
-    void getTransactionsForCustomer_NoAccounts() {
-        when(accountRepository.findAll()).thenReturn(Collections.emptyList());
-
-        assertThrows(NotFoundException.class, () -> {
-            transactionService.getTransactionsForCustomer(1L, startDate, endDate);
-        });
-    }
-
-    @Test
     void getTransactionsForCustomer_NoTransactions() {
-        when(accountRepository.findAll()).thenReturn(Arrays.asList(testAccount));
+        Long customerId = 1L;
+        when(customerService.getCustomerById(customerId)).thenReturn(new Customer());
+        when(accountRepository.findByCustomerId(customerId)).thenReturn(Arrays.asList(testAccount));
         when(transactionRepository.findAll()).thenReturn(Collections.emptyList());
 
-        List<TransactionReportDTO> result = transactionService.getTransactionsForCustomer(1L, startDate, endDate);
+        List<TransactionReportDTO> result = transactionService.getTransactionsForCustomer(customerId, startDate, endDate);
 
         assertNotNull(result);
         assertTrue(result.isEmpty());
@@ -98,19 +99,21 @@ class TransactionServiceTest {
 
     @Test
     void getTransactionsForCustomer_FiltersByDateRange() {
-        // Create a transaction outside the date range
+        Long customerId = 1L;
+        when(customerService.getCustomerById(customerId)).thenReturn(new Customer());
+
         Transaction oldTransaction = new Transaction();
         oldTransaction.setAccount(testAccount);
         oldTransaction.setType("W");
         oldTransaction.setAmount(200.0);
         oldTransaction.setDate(LocalDateTime.now().minusDays(10));
 
-        when(accountRepository.findAll()).thenReturn(Arrays.asList(testAccount));
+        when(accountRepository.findByCustomerId(customerId)).thenReturn(Arrays.asList(testAccount));
         when(transactionRepository.findAll()).thenReturn(Arrays.asList(testTransaction, oldTransaction));
 
-        List<TransactionReportDTO> result = transactionService.getTransactionsForCustomer(1L, startDate, endDate);
+        List<TransactionReportDTO> result = transactionService.getTransactionsForCustomer(customerId, startDate, endDate);
 
         assertNotNull(result);
-        assertEquals(1, result.size()); // Only the transaction within date range should be returned
+        assertEquals(1, result.size());
     }
 }

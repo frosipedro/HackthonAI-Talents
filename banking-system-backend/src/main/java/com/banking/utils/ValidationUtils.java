@@ -13,25 +13,25 @@ public class ValidationUtils {
 
     public static boolean isValidName(String name) {
         if (name == null || name.trim().isEmpty()) {
-            throw new ValidationException("Nome é obrigatório");
+            throw new ValidationException("Name is required");
         }
         if (name.length() > MAX_NAME_LENGTH) {
-            throw new ValidationException("Nome não pode exceder " + MAX_NAME_LENGTH + " caracteres");
+            throw new ValidationException("Name cannot exceed " + MAX_NAME_LENGTH + " characters");
         }
         return true;
     }
 
     public static boolean isValidEmail(String email) {
         if (email == null || email.trim().isEmpty()) {
-            throw new ValidationException("Email é obrigatório");
+            throw new ValidationException("Email is required");
         }
         if (email.length() > MAX_EMAIL_LENGTH) {
-            throw new ValidationException("Email não pode exceder " + MAX_EMAIL_LENGTH + " caracteres");
+            throw new ValidationException("Email cannot exceed " + MAX_EMAIL_LENGTH + " characters");
         }
 
         String emailRegex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9-]+\\.[A-Za-z0-9-.]+$";
         if (!email.matches(emailRegex)) {
-            throw new ValidationException("Invalid email format"); // Changed to match test expectation
+            throw new ValidationException("Invalid email format");
         }
 
         return true;

@@ -2,6 +2,7 @@ package com.banking.controllers;
 
 import com.banking.dto.TransactionReportDTO;
 import com.banking.services.TransactionService;
+import com.banking.utils.constants.MessageConstants;
 import com.banking.utils.exception.ValidationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -25,7 +26,7 @@ public class TransactionController {
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
 
         if (startDate.isAfter(endDate)) {
-            throw new ValidationException("Start date must be before or equal to end date");
+            throw new ValidationException(MessageConstants.INVALID_DATE_RANGE);
         }
 
         List<TransactionReportDTO> transactions = transactionService.getTransactionsForCustomer(customerId, startDate,

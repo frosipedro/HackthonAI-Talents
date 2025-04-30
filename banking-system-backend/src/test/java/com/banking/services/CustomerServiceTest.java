@@ -3,6 +3,7 @@ package com.banking.services;
 import com.banking.entities.Customer;
 import com.banking.repositories.AccountRepository;
 import com.banking.repositories.CustomerRepository;
+import com.banking.utils.constants.MessageConstants;
 import com.banking.utils.exception.ValidationException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -48,7 +49,7 @@ class CustomerServiceTest {
         customer.setName("Test User");
         customer.setEmail("test@example.com");
         customer.setBirthDate("1990-01-01");
-        customer.setCpf("12345678909"); // Valid CPF
+        customer.setCpf("12345678909");
 
         when(customerRepository.save(any(Customer.class))).thenReturn(customer);
 
@@ -63,7 +64,7 @@ class CustomerServiceTest {
         customer.setName("Test User");
         customer.setEmail("valid.email@domain.com");
         customer.setBirthDate("1990-01-01");
-        customer.setCpf("52998224725"); // Valid CPF
+        customer.setCpf("52998224725");
 
         when(customerRepository.save(any(Customer.class))).thenReturn(customer);
 
@@ -74,24 +75,21 @@ class CustomerServiceTest {
 
     @Test
     void createCustomer_WithInvalidEmail_ThrowsException() {
-        // Arrange
         Customer newCustomer = new Customer();
         newCustomer.setName("Test User");
         newCustomer.setEmail("invalid-email");
         newCustomer.setBirthDate(LocalDate.now().minusYears(20).toString());
 
-        // Act & Assert
         ValidationException exception = assertThrows(ValidationException.class, () -> {
             customerService.createCustomer(newCustomer);
         });
 
-        assertEquals("Invalid email format", exception.getMessage());
+        assertEquals(MessageConstants.INVALID_EMAIL_FORMAT, exception.getMessage());
         verify(customerRepository, never()).save(any(Customer.class));
     }
 
     @Test
     void createCustomer_WithDuplicateEmail_ThrowsException() {
-        // Arrange
         Customer existingCustomer = new Customer();
         existingCustomer.setEmail("existing@email.com");
 
@@ -102,12 +100,11 @@ class CustomerServiceTest {
 
         when(customerRepository.findByEmail("existing@email.com")).thenReturn(Optional.of(existingCustomer));
 
-        // Act & Assert
         ValidationException exception = assertThrows(ValidationException.class, () -> {
             customerService.createCustomer(newCustomer);
         });
 
-        assertEquals("Email already exists", exception.getMessage());
+        assertEquals(MessageConstants.EMAIL_ALREADY_EXISTS, exception.getMessage());
         verify(customerRepository, never()).save(any(Customer.class));
     }
 
@@ -117,11 +114,13 @@ class CustomerServiceTest {
         customerWithFutureDate.setName("Test User");
         customerWithFutureDate.setEmail("test@example.com");
         customerWithFutureDate.setBirthDate(LocalDate.now().plusDays(1).toString());
+        customerWithFutureDate.setCpf("52998224725"); // Add valid CPF
 
-        assertThrows(ValidationException.class, () -> {
+        ValidationException exception = assertThrows(ValidationException.class, () -> {
             customerService.createCustomer(customerWithFutureDate);
         });
 
+        assertEquals(MessageConstants.FUTURE_DATE_NOT_ALLOWED, exception.getMessage());
         verify(customerRepository, never()).save(any(Customer.class));
     }
 
@@ -131,7 +130,7 @@ class CustomerServiceTest {
         customer.setName("Test User");
         customer.setEmail("test@example.com");
         customer.setBirthDate("1990-01-01");
-        customer.setCpf("12345"); // Invalid CPF
+        customer.setCpf("12345");
 
         assertThrows(ValidationException.class, () -> {
             customerService.createCustomer(customer);
@@ -175,9 +174,11 @@ class CustomerServiceTest {
     void getCustomerById_NotFound_ThrowsException() {
         when(customerRepository.findById(1L)).thenReturn(Optional.empty());
 
-        assertThrows(ValidationException.class, () -> {
+        ValidationException exception = assertThrows(ValidationException.class, () -> {
             customerService.getCustomerById(1L);
         });
+
+        assertEquals(String.format(MessageConstants.CUSTOMER_NOT_FOUND, 1L), exception.getMessage());
     }
 
     @Test
@@ -213,10 +214,11 @@ class CustomerServiceTest {
     void updateCustomer_NotFound_ThrowsException() {
         when(customerRepository.findById(1L)).thenReturn(Optional.empty());
 
-        assertThrows(ValidationException.class, () -> {
+        ValidationException exception = assertThrows(ValidationException.class, () -> {
             customerService.updateCustomer(1L, testCustomer);
         });
 
+        assertEquals(String.format(MessageConstants.CUSTOMER_NOT_FOUND, 1L), exception.getMessage());
         verify(customerRepository, never()).save(any(Customer.class));
     }
 
@@ -224,7 +226,6 @@ class CustomerServiceTest {
     void updateCustomerPartial_Success() {
         Customer partialCustomer = new Customer();
         partialCustomer.setName("Updated Name");
-        // Deixando email e birthDate como null para testar atualização parcial
 
         when(customerRepository.findById(1L)).thenReturn(Optional.of(testCustomer));
         when(customerRepository.save(any(Customer.class))).thenAnswer(i -> i.getArguments()[0]);
@@ -233,7 +234,6 @@ class CustomerServiceTest {
 
         assertNotNull(result);
         assertEquals("Updated Name", result.getName());
-        // Verificando se os campos não atualizados permaneceram inalterados
         assertEquals(testCustomer.getEmail(), result.getEmail());
         assertEquals(testCustomer.getBirthDate(), result.getBirthDate());
     }
@@ -249,7 +249,7 @@ class CustomerServiceTest {
             customerService.updateCustomerPartial(1L, partialUpdate);
         });
 
-        assertEquals("Invalid email format", exception.getMessage());
+        assertEquals(MessageConstants.INVALID_EMAIL_FORMAT, exception.getMessage());
         verify(customerRepository, never()).save(any(Customer.class));
     }
 
@@ -264,7 +264,7 @@ class CustomerServiceTest {
             customerService.updateCustomerPartial(1L, partialUpdate);
         });
 
-        assertEquals("Birth date cannot be in the future", exception.getMessage());
+        assertEquals(MessageConstants.FUTURE_DATE_NOT_ALLOWED, exception.getMessage());
         verify(customerRepository, never()).save(any(Customer.class));
     }
 
@@ -286,10 +286,11 @@ class CustomerServiceTest {
     void deleteCustomer_NotFound_ThrowsException() {
         when(customerRepository.findById(1L)).thenReturn(Optional.empty());
 
-        assertThrows(ValidationException.class, () -> {
+        ValidationException exception = assertThrows(ValidationException.class, () -> {
             customerService.deleteCustomer(1L);
         });
 
+        assertEquals(String.format(MessageConstants.CUSTOMER_NOT_FOUND, 1L), exception.getMessage());
         verify(customerRepository, never()).deleteById(anyLong());
     }
 }

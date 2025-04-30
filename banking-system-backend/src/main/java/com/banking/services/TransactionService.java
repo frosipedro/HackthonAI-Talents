@@ -5,6 +5,7 @@ import com.banking.entities.Account;
 import com.banking.entities.Transaction;
 import com.banking.repositories.AccountRepository;
 import com.banking.repositories.TransactionRepository;
+import com.banking.utils.constants.MessageConstants;
 import com.banking.utils.exception.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,14 +27,11 @@ public class TransactionService {
     }
 
     public List<TransactionReportDTO> getTransactionsForCustomer(Long customerId, LocalDate startDate,
-            LocalDate endDate) {
-        List<Account> accounts = accountRepository.findAll()
-                .stream()
-                .filter(account -> account.getCustomerId().equals(customerId))
-                .collect(Collectors.toList());
+                                                                 LocalDate endDate) {
+        List<Account> accounts = accountRepository.findByCustomerId(customerId);
 
         if (accounts.isEmpty()) {
-            throw new NotFoundException("No accounts found for customer ID " + customerId);
+            throw new NotFoundException(String.format(MessageConstants.CUSTOMER_NOT_FOUND, customerId));
         }
 
         List<Transaction> transactions = transactionRepository.findAll()
@@ -45,9 +43,9 @@ public class TransactionService {
 
         return transactions.stream()
                 .map(transaction -> new TransactionReportDTO(
-                        transaction.getDate().toLocalDate().toString(), // Formatar data como YYYY/MM/DD
-                        transaction.getAccount().getAccountType(), // Tipo da conta
-                        transaction.getType(), // Tipo da transação
+                        transaction.getDate().toLocalDate().toString(),
+                        transaction.getAccount().getAccountType(),
+                        transaction.getType(),
                         transaction.getAmount()))
                 .collect(Collectors.toList());
     }

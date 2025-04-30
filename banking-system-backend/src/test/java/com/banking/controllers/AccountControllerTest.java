@@ -19,6 +19,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.util.Arrays;
 import java.util.List;
 
+import static com.banking.utils.constants.MessageConstants.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
@@ -70,8 +71,8 @@ class AccountControllerTest {
         when(accountService.createAccount(eq(1L), eq("S"))).thenReturn(testAccount);
 
         mockMvc.perform(post("/api/accounts")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(createAccountRequest)))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(createAccountRequest)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(testAccount.getId()))
                 .andExpect(jsonPath("$.customerId").value(testAccount.getCustomerId()))
@@ -84,8 +85,8 @@ class AccountControllerTest {
         // Missing required fields
 
         mockMvc.perform(post("/api/accounts")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(invalidRequest)))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(invalidRequest)))
                 .andExpect(status().isBadRequest());
     }
 
@@ -94,8 +95,8 @@ class AccountControllerTest {
         when(accountService.deposit(eq(1L), eq(500.0))).thenReturn(testAccount);
 
         mockMvc.perform(post("/api/accounts/deposit")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(depositRequest)))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(depositRequest)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(testAccount.getId()))
                 .andExpect(jsonPath("$.balance").value(testAccount.getBalance()));
@@ -103,11 +104,12 @@ class AccountControllerTest {
 
     @Test
     void deposit_InvalidAmount() throws Exception {
-        when(accountService.deposit(any(), any())).thenThrow(new ValidationException("Invalid amount"));
+        when(accountService.deposit(any(), any()))
+                .thenThrow(new ValidationException(INVALID_AMOUNT));
 
         mockMvc.perform(post("/api/accounts/deposit")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(depositRequest)))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(depositRequest)))
                 .andExpect(status().isBadRequest());
     }
 
@@ -116,8 +118,8 @@ class AccountControllerTest {
         when(accountService.withdraw(eq(1L), eq(300.0))).thenReturn(testAccount);
 
         mockMvc.perform(post("/api/accounts/withdraw")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(withdrawRequest)))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(withdrawRequest)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(testAccount.getId()))
                 .andExpect(jsonPath("$.balance").value(testAccount.getBalance()));
@@ -125,11 +127,12 @@ class AccountControllerTest {
 
     @Test
     void withdraw_InsufficientBalance() throws Exception {
-        when(accountService.withdraw(any(), any())).thenThrow(new ValidationException("Insufficient balance"));
+        when(accountService.withdraw(any(), any()))
+                .thenThrow(new ValidationException(INSUFFICIENT_BALANCE));
 
         mockMvc.perform(post("/api/accounts/withdraw")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(withdrawRequest)))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(withdrawRequest)))
                 .andExpect(status().isBadRequest());
     }
 
@@ -147,7 +150,8 @@ class AccountControllerTest {
 
     @Test
     void getAccountsByCustomerId_CustomerNotFound() throws Exception {
-        when(accountService.getAccountsByCustomerId(1L)).thenThrow(new NotFoundException("Customer not found"));
+        when(accountService.getAccountsByCustomerId(1L))
+                .thenThrow(new NotFoundException(CUSTOMER_NOT_FOUND));
 
         mockMvc.perform(get("/api/accounts/customer/1"))
                 .andExpect(status().isNotFound());
