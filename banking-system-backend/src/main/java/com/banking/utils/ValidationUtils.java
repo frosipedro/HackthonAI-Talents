@@ -1,17 +1,40 @@
 package com.banking.utils;
 
+import com.banking.utils.exception.ValidationException;
+
 import java.time.LocalDate;
 import java.time.Period;
 import java.time.format.DateTimeParseException;
 
 public class ValidationUtils {
 
-    public static boolean isValidEmail(String email) {
-        if (email == null || email.isEmpty()) {
-            return false;
+    private static final int MAX_NAME_LENGTH = 30;
+    private static final int MAX_EMAIL_LENGTH = 50;
+
+    public static boolean isValidName(String name) {
+        if (name == null || name.trim().isEmpty()) {
+            throw new ValidationException("Nome é obrigatório");
         }
+        if (name.length() > MAX_NAME_LENGTH) {
+            throw new ValidationException("Nome não pode exceder " + MAX_NAME_LENGTH + " caracteres");
+        }
+        return true;
+    }
+
+    public static boolean isValidEmail(String email) {
+        if (email == null || email.trim().isEmpty()) {
+            throw new ValidationException("Email é obrigatório");
+        }
+        if (email.length() > MAX_EMAIL_LENGTH) {
+            throw new ValidationException("Email não pode exceder " + MAX_EMAIL_LENGTH + " caracteres");
+        }
+
         String emailRegex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9-]+\\.[A-Za-z0-9-.]+$";
-        return email.matches(emailRegex);
+        if (!email.matches(emailRegex)) {
+            throw new ValidationException("Invalid email format"); // Changed to match test expectation
+        }
+
+        return true;
     }
 
     public static boolean isValidDate(String date) {
