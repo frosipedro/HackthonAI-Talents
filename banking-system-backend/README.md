@@ -77,6 +77,7 @@ banking-system
    ```
 2. Access the folder:
    ```
+   cd HackthonAI-Talents
    cd banking-system-backend
    ```
 
@@ -224,7 +225,7 @@ banking-system
     "balance": 0.0
    }
    ```
- - `GET /accounts/customer/{id}`: Retrieve an account by customer ID.
+  - `GET /accounts/customer/{id}`: Retrieve an account by customer ID.
 
    Request:
    ```
