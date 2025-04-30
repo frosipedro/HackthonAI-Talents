@@ -1,7 +1,7 @@
 import { Routes } from '@angular/router';
 import { SaqueComponent } from './saque/saque.component';
-
 import { FormulariocadastroComponent } from './formulariocadastro/formulariocadastro.component'; 
+import { OpenAccountComponent } from './OpenAccount/open-account.component';
 
 export const routes: Routes = [
     {
@@ -11,5 +11,9 @@ export const routes: Routes = [
     {
         path: "saque",
         component: SaqueComponent
+    },
+    {
+        path: 'open-account',
+        component: OpenAccountComponent
     }
 ];

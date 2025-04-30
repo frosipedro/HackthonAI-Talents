@@ -1,0 +1,15 @@
+<h2>Abrir Conta</h2>
+<form (ngSubmit)="onSubmit(openAccountForm)" #openAccountForm="ngForm">
+  <div>
+    <label for="clientId">ID do Cliente:</label>
+    <input type="text" id="clientId" name="clientId" ngModel required />
+  </div>
+  <div>
+    <label for="accountType">Tipo de Conta:</label>
+    <select id="accountType" name="accountType" ngModel required>
+      <option value="savings">Conta Poupança</option>
+      <option value="checking">Conta Corrente</option>
+    </select>
+  </div>
+  <button type="submit" [disabled]="!openAccountForm.valid">Abrir Conta</button>
+</form>
