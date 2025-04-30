@@ -2,6 +2,7 @@ package com.banking.controllers;
 
 import com.banking.dto.TransactionReportDTO;
 import com.banking.services.TransactionService;
+import com.banking.utils.constants.MessageConstants;
 import com.banking.utils.exception.NotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,6 +15,7 @@ import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Collections;
 
+import static com.banking.utils.constants.MessageConstants.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
@@ -55,8 +57,8 @@ class TransactionControllerTest {
                 .thenReturn(Arrays.asList(testReport));
 
         mockMvc.perform(get("/api/transactions/customer/1")
-                .param("startDate", startDate.toString())
-                .param("endDate", endDate.toString()))
+                        .param("startDate", startDate.toString())
+                        .param("endDate", endDate.toString()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].date").value(testReport.getDate()))
                 .andExpect(jsonPath("$[0].accountType").value(testReport.getAccountType()))
@@ -73,8 +75,8 @@ class TransactionControllerTest {
                 .thenReturn(Collections.emptyList());
 
         mockMvc.perform(get("/api/transactions/customer/1")
-                .param("startDate", startDate.toString())
-                .param("endDate", endDate.toString()))
+                        .param("startDate", startDate.toString())
+                        .param("endDate", endDate.toString()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").isArray())
                 .andExpect(jsonPath("$").isEmpty());
@@ -86,11 +88,11 @@ class TransactionControllerTest {
                 eq(1L),
                 any(LocalDate.class),
                 any(LocalDate.class)))
-                .thenThrow(new NotFoundException("Customer not found"));
+                .thenThrow(new NotFoundException(String.format(CUSTOMER_NOT_FOUND, 1L)));
 
         mockMvc.perform(get("/api/transactions/customer/1")
-                .param("startDate", startDate.toString())
-                .param("endDate", endDate.toString()))
+                        .param("startDate", startDate.toString())
+                        .param("endDate", endDate.toString()))
                 .andExpect(status().isNotFound());
     }
 
@@ -99,8 +101,8 @@ class TransactionControllerTest {
         LocalDate invalidEndDate = startDate.minusDays(1); // End date before start date
 
         mockMvc.perform(get("/api/transactions/customer/1")
-                .param("startDate", startDate.toString())
-                .param("endDate", invalidEndDate.toString()))
+                        .param("startDate", startDate.toString())
+                        .param("endDate", invalidEndDate.toString()))
                 .andExpect(status().isBadRequest());
     }
 }

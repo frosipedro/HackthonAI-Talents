@@ -5,6 +5,7 @@ import com.banking.entities.Transaction;
 import com.banking.repositories.AccountRepository;
 import com.banking.repositories.CustomerRepository;
 import com.banking.repositories.TransactionRepository;
+import com.banking.utils.constants.MessageConstants;
 import com.banking.utils.exception.NotFoundException;
 import com.banking.utils.exception.ValidationException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,19 +23,17 @@ public class AccountService {
 
     @Autowired
     public AccountService(AccountRepository accountRepository, CustomerRepository customerRepository,
-            TransactionRepository transactionRepository) {
+                          TransactionRepository transactionRepository) {
         this.accountRepository = accountRepository;
         this.customerRepository = customerRepository;
         this.transactionRepository = transactionRepository;
     }
 
     public Account createAccount(Long customerId, String accountType) {
-        // Verificar se o cliente existe
         if (!customerRepository.existsById(customerId)) {
-            throw new IllegalArgumentException("Customer with ID " + customerId + " does not exist.");
+            throw new NotFoundException(String.format(MessageConstants.CUSTOMER_NOT_FOUND, customerId));
         }
 
-        // Criar nova conta
         Account account = new Account();
         account.setCustomerId(customerId);
         account.setAccountType(accountType);
@@ -45,10 +44,9 @@ public class AccountService {
 
     public Account deposit(Long accountId, Double amount) {
         if (amount == null) {
-            throw new ValidationException("Amount cannot be null");
+            throw new ValidationException(MessageConstants.INVALID_TRANSACTION_AMOUNT);
         }
 
-        // Convert negative to positive before validation
         if (amount < 0) {
             amount = Math.abs(amount);
         }
@@ -56,7 +54,7 @@ public class AccountService {
         validateTransactionAmount(amount);
 
         Account account = accountRepository.findById(accountId)
-                .orElseThrow(() -> new NotFoundException("Account with ID " + accountId + " not found."));
+                .orElseThrow(() -> new NotFoundException(String.format(MessageConstants.ACCOUNT_NOT_FOUND, accountId)));
 
         account.setBalance(account.getBalance() + amount);
         accountRepository.save(account);
@@ -73,10 +71,9 @@ public class AccountService {
 
     public Account withdraw(Long accountId, Double amount) {
         if (amount == null) {
-            throw new ValidationException("Amount cannot be null");
+            throw new ValidationException(MessageConstants.INVALID_TRANSACTION_AMOUNT);
         }
 
-        // Convert negative to positive before validation
         if (amount < 0) {
             amount = Math.abs(amount);
         }
@@ -84,10 +81,10 @@ public class AccountService {
         validateTransactionAmount(amount);
 
         Account account = accountRepository.findById(accountId)
-                .orElseThrow(() -> new NotFoundException("Account with ID " + accountId + " not found."));
+                .orElseThrow(() -> new NotFoundException(String.format(MessageConstants.ACCOUNT_NOT_FOUND, accountId)));
 
         if (account.getBalance() < amount) {
-            throw new ValidationException("Insufficient balance for withdrawal.");
+            throw new ValidationException(MessageConstants.INSUFFICIENT_BALANCE);
         }
 
         account.setBalance(account.getBalance() - amount);
@@ -105,13 +102,13 @@ public class AccountService {
 
     private void validateTransactionAmount(Double amount) {
         if (amount <= 0.01 || amount > 999999.99) {
-            throw new ValidationException("Transaction amount must be between 0.01 and 999999.99");
+            throw new ValidationException(MessageConstants.INVALID_TRANSACTION_AMOUNT);
         }
     }
 
     public List<Account> getAccountsByCustomerId(Long customerId) {
         if (!customerRepository.existsById(customerId)) {
-            throw new NotFoundException("Customer not found with id " + customerId);
+            throw new NotFoundException(String.format(MessageConstants.CUSTOMER_NOT_FOUND, customerId));
         }
         return accountRepository.findByCustomerId(customerId);
     }

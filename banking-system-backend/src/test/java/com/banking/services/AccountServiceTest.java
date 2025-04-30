@@ -5,6 +5,7 @@ import com.banking.entities.Transaction;
 import com.banking.repositories.AccountRepository;
 import com.banking.repositories.CustomerRepository;
 import com.banking.repositories.TransactionRepository;
+import com.banking.utils.constants.MessageConstants;
 import com.banking.utils.exception.NotFoundException;
 import com.banking.utils.exception.ValidationException;
 import org.junit.jupiter.api.BeforeEach;
@@ -17,6 +18,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
+import static com.banking.utils.constants.MessageConstants.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -70,10 +72,12 @@ class AccountServiceTest {
     void createAccount_CustomerNotFound() {
         when(customerRepository.existsById(1L)).thenReturn(false);
 
-        assertThrows(IllegalArgumentException.class, () -> {
+        // Change assertion to expect NotFoundException instead of IllegalArgumentException
+        NotFoundException exception = assertThrows(NotFoundException.class, () -> {
             accountService.createAccount(1L, "S");
         });
 
+        assertEquals(String.format(MessageConstants.CUSTOMER_NOT_FOUND, 1L), exception.getMessage());
         verify(accountRepository, never()).save(any(Account.class));
     }
 
@@ -101,10 +105,11 @@ class AccountServiceTest {
     void deposit_AccountNotFound() {
         when(accountRepository.findById(1L)).thenReturn(Optional.empty());
 
-        assertThrows(NotFoundException.class, () -> {
+        NotFoundException exception = assertThrows(NotFoundException.class, () -> {
             accountService.deposit(1L, 500.0);
         });
 
+        assertEquals(String.format(ACCOUNT_NOT_FOUND, 1L), exception.getMessage());
         verify(transactionRepository, never()).save(any(Transaction.class));
     }
 
@@ -132,20 +137,22 @@ class AccountServiceTest {
     void deposit_AmountTooHigh_ThrowsException() {
         Double depositAmount = 1000000.0;
 
-        assertThrows(ValidationException.class, () -> {
+        ValidationException exception = assertThrows(ValidationException.class, () -> {
             accountService.deposit(1L, depositAmount);
         });
 
+        assertEquals(MessageConstants.INVALID_TRANSACTION_AMOUNT, exception.getMessage());
         verify(accountRepository, never()).save(any(Account.class));
         verify(transactionRepository, never()).save(any(Transaction.class));
     }
 
     @Test
     void deposit_NullAmount_ThrowsException() {
-        assertThrows(ValidationException.class, () -> {
+        ValidationException exception = assertThrows(ValidationException.class, () -> {
             accountService.deposit(1L, null);
         });
 
+        assertEquals(INVALID_TRANSACTION_AMOUNT, exception.getMessage());
         verify(accountRepository, never()).save(any(Account.class));
         verify(transactionRepository, never()).save(any(Transaction.class));
     }
@@ -174,20 +181,22 @@ class AccountServiceTest {
     void withdraw_AmountTooHigh_ThrowsException() {
         Double withdrawAmount = 1000000.0;
 
-        assertThrows(ValidationException.class, () -> {
+        ValidationException exception = assertThrows(ValidationException.class, () -> {
             accountService.withdraw(1L, withdrawAmount);
         });
 
+        assertEquals(MessageConstants.INVALID_TRANSACTION_AMOUNT, exception.getMessage());
         verify(accountRepository, never()).save(any(Account.class));
         verify(transactionRepository, never()).save(any(Transaction.class));
     }
 
     @Test
     void withdraw_NullAmount_ThrowsException() {
-        assertThrows(ValidationException.class, () -> {
+        ValidationException exception = assertThrows(ValidationException.class, () -> {
             accountService.withdraw(1L, null);
         });
 
+        assertEquals(INVALID_TRANSACTION_AMOUNT, exception.getMessage());
         verify(accountRepository, never()).save(any(Account.class));
         verify(transactionRepository, never()).save(any(Transaction.class));
     }
@@ -218,10 +227,11 @@ class AccountServiceTest {
 
         when(accountRepository.findById(1L)).thenReturn(Optional.of(testAccount));
 
-        assertThrows(ValidationException.class, () -> {
+        ValidationException exception = assertThrows(ValidationException.class, () -> {
             accountService.withdraw(1L, withdrawAmount);
         });
 
+        assertEquals(INSUFFICIENT_BALANCE, exception.getMessage());
         verify(accountRepository, never()).save(any(Account.class));
         verify(transactionRepository, never()).save(any(Transaction.class));
     }
@@ -230,10 +240,11 @@ class AccountServiceTest {
     void withdraw_AccountNotFound() {
         when(accountRepository.findById(1L)).thenReturn(Optional.empty());
 
-        assertThrows(NotFoundException.class, () -> {
+        NotFoundException exception = assertThrows(NotFoundException.class, () -> {
             accountService.withdraw(1L, 500.0);
         });
 
+        assertEquals(String.format(ACCOUNT_NOT_FOUND, 1L), exception.getMessage());
         verify(transactionRepository, never()).save(any(Transaction.class));
     }
 
@@ -254,10 +265,11 @@ class AccountServiceTest {
     void getAccountsByCustomerId_CustomerNotFound() {
         when(customerRepository.existsById(1L)).thenReturn(false);
 
-        assertThrows(NotFoundException.class, () -> {
+        NotFoundException exception = assertThrows(NotFoundException.class, () -> {
             accountService.getAccountsByCustomerId(1L);
         });
 
+        assertEquals(String.format(CUSTOMER_NOT_FOUND, 1L), exception.getMessage());
         verify(accountRepository, never()).findByCustomerId(any());
     }
 }

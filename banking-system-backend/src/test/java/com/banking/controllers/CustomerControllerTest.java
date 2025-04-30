@@ -2,6 +2,7 @@ package com.banking.controllers;
 
 import com.banking.entities.Customer;
 import com.banking.services.CustomerService;
+import com.banking.utils.constants.MessageConstants;
 import com.banking.utils.exception.ValidationException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -14,6 +15,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.Arrays;
 
+import static com.banking.utils.constants.MessageConstants.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -40,7 +42,7 @@ class CustomerControllerTest {
         testCustomer.setName("Test User");
         testCustomer.setEmail("test@example.com");
         testCustomer.setBirthDate("1990-01-01");
-        testCustomer.setCpf("52998224725"); // Added valid CPF
+        testCustomer.setCpf("52998224725"); // CPF válido
     }
 
     @Test
@@ -60,7 +62,7 @@ class CustomerControllerTest {
     @Test
     void createCustomer_InvalidData_BadRequest() throws Exception {
         Customer invalidCustomer = new Customer();
-        // Missing required fields
+        // Campos obrigatórios ausentes
 
         mockMvc.perform(post("/api/customers")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -82,7 +84,8 @@ class CustomerControllerTest {
 
     @Test
     void getCustomerById_NotFound() throws Exception {
-        when(customerService.getCustomerById(1L)).thenThrow(new ValidationException("Customer not found"));
+        when(customerService.getCustomerById(1L)).thenThrow(new ValidationException(
+                String.format(CUSTOMER_NOT_FOUND, 1L)));
 
         mockMvc.perform(get("/api/customers/1"))
                 .andExpect(status().isBadRequest());
