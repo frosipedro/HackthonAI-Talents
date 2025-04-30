@@ -62,8 +62,8 @@ banking-system
 
 1. Clone the repository:
    ```
-   git clone <repository-url>
-   cd banking-system
+   git clone https://github.com/frosipedro/HackthonAI-Talents.git
+   cd banking-system-backend
    ```
 
 2. Build the project:
@@ -78,6 +78,9 @@ banking-system
 
 ### API Endpoints
 
+- **Base URL**
+  - `http://localhost:8080/api`
+
 - **Customer Endpoints**
   - `POST /customers`: Create a new customer.
   - `GET /customers/{id}`: Retrieve a customer by ID.
@@ -86,14 +89,17 @@ banking-system
 
 - **Account Endpoints**
   - `POST /accounts`: Create a new account.
-  - `GET /accounts/customer/{customerId}`: Retrieve accounts by customer ID.
-  - `GET /accounts/{accountId}/balance`: Check account balance.
+  - `POST /accounts/deposit`: Deposit to an account.
+  - `POST /accounts/withdraw`: withdraw from an account.
 
 - **Transaction Endpoints**
-  - `POST /transactions`: Create a new transaction.
-  - `GET /transactions/account/{accountId}`: Retrieve transactions by account ID.
+  - `GET /transactions/customer/{id}?startDate={startDate}&endDate={endDate}`: Retrieve transactions by account ID.
+
 
 ### Database Configuration
+
+- **Database**
+  - `http://localhost:8080/h2-console`
 
 The application uses an H2 in-memory database. The configuration can be found in `src/main/resources/application.properties`.
 
