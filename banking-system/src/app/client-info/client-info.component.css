@@ -1,0 +1,45 @@
+.client-card {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+  }
+  
+  .form-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    margin-bottom: 20px;
+  }
+  
+  .client-info {
+    margin-top: 20px;
+  }
+  
+  .info-item {
+    margin: 10px 0;
+  }
+  
+  .info-label {
+    font-weight: bold;
+    margin-right: 10px;
+  }
+  
+  .accounts-container {
+    display: grid;
+    gap: 20px;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    margin-top: 20px;
+  }
+  
+  .account-card {
+    padding: 10px;
+  }
+  
+  mat-form-field {
+    width: 100%;
+  }
+  
+  button {
+    align-self: flex-start;
+  }
+  

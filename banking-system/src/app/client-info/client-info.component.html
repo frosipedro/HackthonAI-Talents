@@ -1,0 +1,54 @@
+<mat-card class="client-card">
+    <mat-card-header>
+        <mat-card-title>Consulta de Cliente</mat-card-title>
+    </mat-card-header>
+
+    <mat-card-content>
+        <div class="form-container">
+            <mat-form-field appearance="fill">
+                <mat-label>ID do Cliente</mat-label>
+                <input matInput 
+                       [(ngModel)]="clientId" 
+                       name="clientId"
+                       type="number">
+            </mat-form-field>
+            <button mat-raised-button 
+                    color="primary" 
+                    (click)="searchClient()"
+                    type="button">
+                Buscar Cliente
+            </button>
+        </div>
+
+        <div *ngIf="showClientInfo && client" class="client-info">
+            <h2>Informações do Cliente</h2>
+            
+            <div class="info-item">
+                <span class="info-label">ID:</span> {{client.id}}
+            </div>
+            <div class="info-item">
+                <span class="info-label">Nome:</span> {{client.name}}
+            </div>
+            <div class="info-item">
+                <span class="info-label">Email:</span> {{client.email}}
+            </div>
+            <div class="info-item">
+                <span class="info-label">Data de Nascimento:</span> {{client.birthDate | date}}
+            </div>
+            <div class="info-item">
+                <span class="info-label">Número de Contas:</span> {{getAccountsCount()}}
+            </div>
+
+            <h3>Contas</h3>
+            <div class="accounts-container">
+                <mat-card *ngFor="let account of client.accounts" class="account-card">
+                    <mat-card-content>
+                        <p><strong>ID da Conta:</strong> {{account.id}}</p>
+                        <p><strong>Tipo:</strong> {{account.type}}</p>
+                        <p><strong>Saldo:</strong> {{account.balance | currency:'BRL'}}</p>
+                    </mat-card-content>
+                </mat-card>
+            </div>
+        </div>
+    </mat-card-content>
+</mat-card>
