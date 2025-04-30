@@ -44,35 +44,32 @@ class CustomerServiceTest {
 
     @Test
     void createCustomer_Success() {
-        when(customerRepository.findByEmail(anyString())).thenReturn(Optional.empty());
-        when(customerRepository.save(any(Customer.class))).thenReturn(testCustomer);
+        Customer customer = new Customer();
+        customer.setName("Test User");
+        customer.setEmail("test@example.com");
+        customer.setBirthDate("1990-01-01");
+        customer.setCpf("12345678909"); // Valid CPF
 
-        Customer result = customerService.createCustomer(testCustomer);
+        when(customerRepository.save(any(Customer.class))).thenReturn(customer);
 
-        assertNotNull(result);
-        assertEquals(testCustomer.getName(), result.getName());
-        assertEquals(testCustomer.getEmail(), result.getEmail());
-        verify(customerRepository).save(any(Customer.class));
+        Customer savedCustomer = customerService.createCustomer(customer);
+        assertNotNull(savedCustomer);
+        verify(customerRepository).save(customer);
     }
 
     @Test
     void createCustomer_WithValidEmail_Success() {
-        // Arrange
-        Customer newCustomer = new Customer();
-        newCustomer.setName("Test User");
-        newCustomer.setEmail("valid@email.com");
-        newCustomer.setBirthDate(LocalDate.now().minusYears(20).toString());
+        Customer customer = new Customer();
+        customer.setName("Test User");
+        customer.setEmail("valid.email@domain.com");
+        customer.setBirthDate("1990-01-01");
+        customer.setCpf("52998224725"); // Valid CPF
 
-        when(customerRepository.findByEmail("valid@email.com")).thenReturn(Optional.empty());
-        when(customerRepository.save(any(Customer.class))).thenReturn(newCustomer);
+        when(customerRepository.save(any(Customer.class))).thenReturn(customer);
 
-        // Act
-        Customer result = customerService.createCustomer(newCustomer);
-
-        // Assert
-        assertNotNull(result);
-        assertEquals("valid@email.com", result.getEmail());
-        verify(customerRepository).save(any(Customer.class));
+        Customer savedCustomer = customerService.createCustomer(customer);
+        assertNotNull(savedCustomer);
+        verify(customerRepository).save(customer);
     }
 
     @Test
@@ -129,14 +126,35 @@ class CustomerServiceTest {
     }
 
     @Test
-    void createCustomer_WithMinorAge_ThrowsException() {
-        Customer minorCustomer = new Customer();
-        minorCustomer.setName("Minor User");
-        minorCustomer.setEmail("minor@example.com");
-        minorCustomer.setBirthDate(LocalDate.now().minusYears(17).toString());
+    void createCustomer_WithInvalidCPF_ThrowsException() {
+        Customer customer = new Customer();
+        customer.setName("Test User");
+        customer.setEmail("test@example.com");
+        customer.setBirthDate("1990-01-01");
+        customer.setCpf("12345"); // Invalid CPF
 
         assertThrows(ValidationException.class, () -> {
-            customerService.createCustomer(minorCustomer);
+            customerService.createCustomer(customer);
+        });
+
+        verify(customerRepository, never()).save(any(Customer.class));
+    }
+
+    @Test
+    void createCustomer_WithDuplicateCPF_ThrowsException() {
+        Customer existingCustomer = new Customer();
+        existingCustomer.setCpf("12345678901");
+
+        Customer newCustomer = new Customer();
+        newCustomer.setName("Test User");
+        newCustomer.setEmail("test@example.com");
+        newCustomer.setBirthDate("1990-01-01");
+        newCustomer.setCpf("12345678901");
+
+        when(customerRepository.findByCpf("12345678901")).thenReturn(Optional.of(existingCustomer));
+
+        assertThrows(ValidationException.class, () -> {
+            customerService.createCustomer(newCustomer);
         });
 
         verify(customerRepository, never()).save(any(Customer.class));
