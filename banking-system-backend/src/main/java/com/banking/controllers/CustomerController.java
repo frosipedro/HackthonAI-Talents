@@ -2,6 +2,7 @@ package com.banking.controllers;
 
 import com.banking.entities.Customer;
 import com.banking.services.CustomerService;
+import com.banking.utils.exception.NotFoundException;
 import com.banking.utils.exception.ValidationException;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +37,20 @@ public class CustomerController {
             return ResponseEntity.status(HttpStatus.CREATED).body(createdCustomer);
         } catch (ValidationException e) {
             return ResponseEntity.badRequest()
+                    .body(Collections.singletonMap("error", e.getMessage()));
+        }
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<?> updateCustomerPartial(@PathVariable Long id, @RequestBody Customer customerDetails) {
+        try {
+            Customer updatedCustomer = customerService.updateCustomerPartial(id, customerDetails);
+            return ResponseEntity.ok(updatedCustomer);
+        } catch (ValidationException e) {
+            return ResponseEntity.badRequest()
+                    .body(Collections.singletonMap("error", e.getMessage()));
+        } catch (NotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(Collections.singletonMap("error", e.getMessage()));
         }
     }
