@@ -1,32 +1,57 @@
-# BankingSystem
+# Banking System Frontend
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.2.9.
+## Overview
 
-## Development server
+A modern banking system frontend built with [Angular CLI](https://github.com/angular/angular-cli) version 19.2.9.
 
-To start a local development server, run:
+## 📁 Project Structure
+
+```
+banking-system-frontend/
+├── src/
+│   ├── app/                # Main components and modules
+│   ├── assets/             # Static assets
+│   ├── environments/       # Environment configs
+│   ├── index.html
+│   └── styles.css
+├── angular.json
+├── package.json
+└── README.md
+```
+
+## ✨ Features
+
+- User-friendly interface for banking operations
+- Modular and scalable Angular architecture
+- Ready for production builds and testing
+- Unit and end-to-end test support
+
+## 🚀 Requirements
+
+- [Node.js](https://nodejs.org/) >= 18.x
+- [Angular CLI](https://angular.dev/tools/cli) >= 19.x
+
+## ⚙️ Installation
+
+Clone the repository and install dependencies:
+
+```bash
+git clone https://github.com/your-username/your-repo.git
+cd banking-system-frontend
+npm install
+```
+
+## 🖥️ Development
+
+To start the development server:
 
 ```bash
 ng serve
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+Open [http://localhost:4200/](http://localhost:4200/) in your browser.
 
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
-
-```bash
-ng generate component component-name
-```
-
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
-```bash
-ng generate --help
-```
-
-## Building
+## 🏗️ Production Build
 
 To build the project run:
 
@@ -36,24 +61,37 @@ ng build
 
 This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
 
-## Running unit tests
+## 🧪 Testing
 
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+### Unit Tests
 
 ```bash
 ng test
 ```
 
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
+### End-to-End Tests
 
 ```bash
 ng e2e
 ```
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+> Note: Choose and configure an e2e framework as needed.
 
-## Additional Resources
+## 🤝 Contributing
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+Contributions are welcome! To contribute:
+
+1. Fork this repository
+2. Create a branch (`git checkout -b feature/your-feature`)
+3. Commit your changes (`git commit -am 'feat: your feature'`)
+4. Push to the branch (`git push origin feature/your-feature`)
+5. Open a Pull Request
+
+## 📚 Resources
+
+- [Angular Documentation](https://angular.dev/docs)
+- [Angular CLI](https://angular.dev/tools/cli)
+
+## 📝 License
+
+This project is licensed under the MIT License. See the LICENSE file for details.
