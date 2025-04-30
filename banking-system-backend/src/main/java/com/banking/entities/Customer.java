@@ -1,17 +1,14 @@
 package com.banking.entities;
 
-import jakarta.persistence.Id;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Email;
 
 @Entity
 public class Customer {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "customer_sequence")
+    @SequenceGenerator(name = "customer_sequence", sequenceName = "customer_seq", allocationSize = 1)
     private Long id;
 
     @NotBlank(message = "Name is mandatory")

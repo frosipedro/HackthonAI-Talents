@@ -7,7 +7,8 @@ import java.time.LocalDateTime;
 public class Transaction {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "transaction_sequence")
+    @SequenceGenerator(name = "transaction_sequence", sequenceName = "transaction_seq", allocationSize = 1)
     private Long id;
 
     @ManyToOne
