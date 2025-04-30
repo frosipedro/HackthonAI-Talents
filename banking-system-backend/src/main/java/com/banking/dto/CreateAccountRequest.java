@@ -5,10 +5,10 @@ import jakarta.validation.constraints.Pattern;
 
 public class CreateAccountRequest {
 
-    @NotNull(message = "Customer ID is mandatory")
+    @NotNull(message = "Customer ID is required")
     private Long customerId;
 
-    @NotNull(message = "Account type is mandatory")
+    @NotNull(message = "Account type is required")
     @Pattern(regexp = "^[CS]$", message = "Account type must be 'C' or 'S'")
     private String accountType;
 
