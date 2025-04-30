@@ -6,7 +6,6 @@ import com.banking.repositories.CustomerRepository;
 import com.banking.repositories.AccountRepository;
 import com.banking.utils.ValidationUtils;
 import com.banking.utils.constants.MessageConstants;
-import com.banking.utils.exception.NotFoundException;
 import com.banking.utils.exception.ValidationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -102,7 +101,7 @@ public class CustomerService {
             existingCustomer.setEmail(customerDetails.getEmail());
         }
         if (customerDetails.getBirthDate() != null) {
-            if (!ValidationUtils.isNotFutureDate(customerDetails.getBirthDate())) {
+            if (!ValidationUtils.isValidName(customerDetails.getBirthDate())) {
                 throw new ValidationException(MessageConstants.FUTURE_DATE_NOT_ALLOWED);
             }
             existingCustomer.setBirthDate(customerDetails.getBirthDate());

@@ -8,6 +8,8 @@ public class MessageConstants {
     // Customer validation messages
     public static final String NAME_REQUIRED = "Name is required";
     public static final String EMAIL_REQUIRED = "Email is required";
+    public static final String CPF_REQUIRED = "CPF is required";
+    public static final String DATE_REQUIRED = "Date is required";
     public static final String INVALID_EMAIL_FORMAT = "Invalid email format";
     public static final String EMAIL_ALREADY_EXISTS = "Email is already in use by another customer";
     public static final String INVALID_DATE_FORMAT = "Invalid date format. Use YYYY-MM-DD";
@@ -34,4 +36,5 @@ public class MessageConstants {
     // Server error messages
     public static final String INTERNAL_SERVER_ERROR = "Internal server error: %s";
     public static final String INVALID_REQUEST_PARAMETERS = "Invalid request parameters";
+
 }
