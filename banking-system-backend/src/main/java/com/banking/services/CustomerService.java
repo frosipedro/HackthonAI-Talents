@@ -59,6 +59,109 @@ public class CustomerService {
         return customerRepository.save(customer);
     }
 
+        public Customer updateCustomer(Long id, Customer customerDetails) {
+            Optional<Customer> customer = customerRepository.findById(id);
+            if (customer.isEmpty()) {
+                throw new ValidationException(String.format(MessageConstants.CUSTOMER_NOT_FOUND, id));
+            }
+
+            Customer existingCustomer = customer.get();
+
+            if (!ValidationUtils.isValidName(customerDetails.getName())) {
+                throw new ValidationException(MessageConstants.NAME_REQUIRED);
+            }
+
+            if (!ValidationUtils.isValidEmail(customerDetails.getEmail())) {
+                throw new ValidationException(MessageConstants.INVALID_EMAIL_FORMAT);
+            }
+
+            Optional<Customer> customerWithEmail = customerRepository.findByEmail(customerDetails.getEmail());
+            if (customerWithEmail.isPresent() && !customerWithEmail.get().getId().equals(id)) {
+                throw new ValidationException(MessageConstants.EMAIL_ALREADY_EXISTS);
+            }
+
+            if (customerDetails.getCpf() != null && !customerDetails.getCpf().equals(existingCustomer.getCpf())) {
+                if (!ValidationUtils.isValidCPF(customerDetails.getCpf())) {
+                    throw new ValidationException(MessageConstants.INVALID_CPF_FORMAT);
+                }
+
+                Optional<Customer> customerWithCPF = customerRepository.findByCpf(customerDetails.getCpf());
+                if (customerWithCPF.isPresent() && !customerWithCPF.get().getId().equals(id)) {
+                    throw new ValidationException(MessageConstants.CPF_ALREADY_EXISTS);
+                }
+            }
+
+            if (customerDetails.getBirthDate() != null) {
+                if (!ValidationUtils.isValidDate(customerDetails.getBirthDate())) {
+                    throw new ValidationException(MessageConstants.INVALID_DATE_FORMAT);
+                }
+                if (!ValidationUtils.isNotFutureDate(customerDetails.getBirthDate())) {
+                    throw new ValidationException(MessageConstants.FUTURE_DATE_NOT_ALLOWED);
+                }
+                if (!ValidationUtils.isAdult(customerDetails.getBirthDate())) {
+                    throw new ValidationException(MessageConstants.MINIMUM_AGE_REQUIRED);
+                }
+            }
+
+            existingCustomer.setName(customerDetails.getName());
+            existingCustomer.setEmail(customerDetails.getEmail());
+            existingCustomer.setBirthDate(customerDetails.getBirthDate());
+            if (customerDetails.getCpf() != null) {
+                existingCustomer.setCpf(customerDetails.getCpf());
+            }
+
+            return customerRepository.save(existingCustomer);
+        }
+
+        public Customer updateCustomerPartial(Long id, Customer customerDetails) {
+            Customer existingCustomer = customerRepository.findById(id)
+                    .orElseThrow(() -> new ValidationException(String.format(MessageConstants.CUSTOMER_NOT_FOUND, id)));
+
+            if (customerDetails.getName() != null) {
+                if (!ValidationUtils.isValidName(customerDetails.getName())) {
+                    throw new ValidationException(MessageConstants.NAME_REQUIRED);
+                }
+                existingCustomer.setName(customerDetails.getName());
+            }
+
+            if (customerDetails.getEmail() != null) {
+                if (!ValidationUtils.isValidEmail(customerDetails.getEmail())) {
+                    throw new ValidationException(MessageConstants.INVALID_EMAIL_FORMAT);
+                }
+                Optional<Customer> customerWithEmail = customerRepository.findByEmail(customerDetails.getEmail());
+                if (customerWithEmail.isPresent() && !customerWithEmail.get().getId().equals(id)) {
+                    throw new ValidationException(MessageConstants.EMAIL_ALREADY_EXISTS);
+                }
+                existingCustomer.setEmail(customerDetails.getEmail());
+            }
+
+            if (customerDetails.getCpf() != null) {
+                if (!ValidationUtils.isValidCPF(customerDetails.getCpf())) {
+                    throw new ValidationException(MessageConstants.INVALID_CPF_FORMAT);
+                }
+                Optional<Customer> customerWithCPF = customerRepository.findByCpf(customerDetails.getCpf());
+                if (customerWithCPF.isPresent() && !customerWithCPF.get().getId().equals(id)) {
+                    throw new ValidationException(MessageConstants.CPF_ALREADY_EXISTS);
+                }
+                existingCustomer.setCpf(customerDetails.getCpf());
+            }
+
+            if (customerDetails.getBirthDate() != null) {
+                if (!ValidationUtils.isValidDate(customerDetails.getBirthDate())) {
+                    throw new ValidationException(MessageConstants.INVALID_DATE_FORMAT);
+                }
+                if (!ValidationUtils.isNotFutureDate(customerDetails.getBirthDate())) {
+                    throw new ValidationException(MessageConstants.FUTURE_DATE_NOT_ALLOWED);
+                }
+                if (!ValidationUtils.isAdult(customerDetails.getBirthDate())) {
+                    throw new ValidationException(MessageConstants.MINIMUM_AGE_REQUIRED);
+                }
+                existingCustomer.setBirthDate(customerDetails.getBirthDate());
+            }
+
+            return customerRepository.save(existingCustomer);
+    }
+
     public Customer getCustomerById(Long id) {
         Optional<Customer> customer = customerRepository.findById(id);
         if (customer.isEmpty()) {
@@ -69,94 +172,6 @@ public class CustomerService {
 
     public List<Customer> getAllCustomers() {
         return customerRepository.findAll();
-    }
-
-    public Customer updateCustomer(Long id, Customer customerDetails) {
-        Optional<Customer> customer = customerRepository.findById(id);
-        if (customer.isEmpty()) {
-            throw new ValidationException(String.format(MessageConstants.CUSTOMER_NOT_FOUND, id));
-        }
-
-        Customer existingCustomer = customer.get();
-
-        if (customerDetails.getCpf() != null && !customerDetails.getCpf().equals(existingCustomer.getCpf())) {
-            if (!ValidationUtils.isValidCPF(customerDetails.getCpf())) {
-                throw new ValidationException(MessageConstants.INVALID_CPF_FORMAT);
-            }
-
-            Optional<Customer> existingCPF = customerRepository.findByCpf(customerDetails.getCpf());
-            if (existingCPF.isPresent()) {
-                throw new ValidationException(MessageConstants.CPF_ALREADY_EXISTS);
-            }
-            existingCustomer.setCpf(customerDetails.getCpf());
-        }
-
-        if (customerDetails.getName() != null) {
-            existingCustomer.setName(customerDetails.getName());
-        }
-        if (customerDetails.getEmail() != null) {
-            if (!ValidationUtils.isValidEmail(customerDetails.getEmail())) {
-                throw new ValidationException(MessageConstants.INVALID_EMAIL_FORMAT);
-            }
-            existingCustomer.setEmail(customerDetails.getEmail());
-        }
-        if (customerDetails.getBirthDate() != null) {
-            if (!ValidationUtils.isValidName(customerDetails.getBirthDate())) {
-                throw new ValidationException(MessageConstants.FUTURE_DATE_NOT_ALLOWED);
-            }
-            existingCustomer.setBirthDate(customerDetails.getBirthDate());
-        }
-
-        return customerRepository.save(existingCustomer);
-    }
-
-    public Customer updateCustomerPartial(Long id, Customer customerDetails) {
-        Customer existingCustomer = customerRepository.findById(id)
-                .orElseThrow(() -> new ValidationException(String.format(MessageConstants.CUSTOMER_NOT_FOUND, id)));
-
-        if (customerDetails.getName() != null) {
-            if (customerDetails.getName().trim().isEmpty()) {
-                throw new ValidationException(MessageConstants.NAME_REQUIRED);
-            }
-            existingCustomer.setName(customerDetails.getName());
-        }
-
-        if (customerDetails.getEmail() != null) {
-            if (!ValidationUtils.isValidEmail(customerDetails.getEmail())) {
-                throw new ValidationException(MessageConstants.INVALID_EMAIL_FORMAT);
-            }
-            Optional<Customer> customerWithEmail = customerRepository.findByEmail(customerDetails.getEmail());
-            if (customerWithEmail.isPresent() && !customerWithEmail.get().getId().equals(id)) {
-                throw new ValidationException(MessageConstants.EMAIL_REQUIRED); // <- você pode criar uma constante como "EMAIL_ALREADY_EXISTS"
-            }
-            existingCustomer.setEmail(customerDetails.getEmail());
-        }
-
-        if (customerDetails.getBirthDate() != null) {
-            if (!ValidationUtils.isValidDate(customerDetails.getBirthDate())) {
-                throw new ValidationException(MessageConstants.INVALID_DATE_FORMAT);
-            }
-            if (!ValidationUtils.isNotFutureDate(customerDetails.getBirthDate())) {
-                throw new ValidationException(MessageConstants.FUTURE_DATE_NOT_ALLOWED);
-            }
-            if (!ValidationUtils.isAdult(customerDetails.getBirthDate())) {
-                throw new ValidationException(MessageConstants.MINIMUM_AGE_REQUIRED);
-            }
-            existingCustomer.setBirthDate(customerDetails.getBirthDate());
-        }
-
-        if (customerDetails.getCpf() != null) {
-            if (!ValidationUtils.isValidCPF(customerDetails.getCpf())) {
-                throw new ValidationException(MessageConstants.INVALID_CPF_FORMAT);
-            }
-            Optional<Customer> customerWithCPF = customerRepository.findByCpf(customerDetails.getCpf());
-            if (customerWithCPF.isPresent() && !customerWithCPF.get().getId().equals(id)) {
-                throw new ValidationException(MessageConstants.CPF_ALREADY_EXISTS);
-            }
-            existingCustomer.setCpf(customerDetails.getCpf());
-        }
-
-        return customerRepository.save(existingCustomer);
     }
 
     public void deleteCustomer(Long id) {

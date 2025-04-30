@@ -2,7 +2,6 @@ package com.banking.controllers;
 
 import com.banking.entities.Customer;
 import com.banking.services.CustomerService;
-import com.banking.utils.constants.MessageConstants;
 import com.banking.utils.exception.ValidationException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
