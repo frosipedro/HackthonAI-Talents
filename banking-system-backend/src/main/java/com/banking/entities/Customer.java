@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 
 @Entity
 public class Customer {
@@ -13,12 +14,15 @@ public class Customer {
     private Long id;
 
     @NotBlank(message = "Name is mandatory")
+    @Size(max = 30, message = "Name must not exceed 30 characters")
     private String name;
 
     @Email(message = "Email should be valid")
     @NotBlank(message = "Email is mandatory")
-    @Column(unique = true)  
+    @Column(unique = true)
+    @Size(max = 50, message = "Email must not exceed 50 characters")
     private String email;
+
 
     @NotBlank(message = "Birth date is mandatory")
     private String birthDate; // Format: YYYY-MM-DD

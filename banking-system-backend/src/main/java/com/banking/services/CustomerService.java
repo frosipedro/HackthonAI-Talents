@@ -31,6 +31,10 @@ public class CustomerService {
             throw new ValidationException("Invalid email format");
         }
 
+        if (!ValidationUtils.isValidName(customer.getName())) {
+            throw new ValidationException("Invalid name format");
+        }
+
         Optional<Customer> existingCustomer = customerRepository.findByEmail(customer.getEmail());
         if (existingCustomer.isPresent()) {
             throw new ValidationException("Email already exists");
