@@ -6,7 +6,8 @@ import jakarta.validation.constraints.NotNull;
 @Entity
 public class Account {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "account_sequence")
+    @SequenceGenerator(name = "account_sequence", sequenceName = "account_seq", allocationSize = 1)
     private Long id;
 
     @NotNull(message = "Customer ID is mandatory")
