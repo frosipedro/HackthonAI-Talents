@@ -221,6 +221,54 @@ class CustomerServiceTest {
     }
 
     @Test
+    void updateCustomerPartial_Success() {
+        Customer partialCustomer = new Customer();
+        partialCustomer.setName("Updated Name");
+        // Deixando email e birthDate como null para testar atualização parcial
+
+        when(customerRepository.findById(1L)).thenReturn(Optional.of(testCustomer));
+        when(customerRepository.save(any(Customer.class))).thenAnswer(i -> i.getArguments()[0]);
+
+        Customer result = customerService.updateCustomerPartial(1L, partialCustomer);
+
+        assertNotNull(result);
+        assertEquals("Updated Name", result.getName());
+        // Verificando se os campos não atualizados permaneceram inalterados
+        assertEquals(testCustomer.getEmail(), result.getEmail());
+        assertEquals(testCustomer.getBirthDate(), result.getBirthDate());
+    }
+
+    @Test
+    void updateCustomerPartial_WithInvalidEmail_ThrowsException() {
+        Customer partialUpdate = new Customer();
+        partialUpdate.setEmail("invalid-email");
+
+        when(customerRepository.findById(1L)).thenReturn(Optional.of(testCustomer));
+
+        ValidationException exception = assertThrows(ValidationException.class, () -> {
+            customerService.updateCustomerPartial(1L, partialUpdate);
+        });
+
+        assertEquals("Invalid email format", exception.getMessage());
+        verify(customerRepository, never()).save(any(Customer.class));
+    }
+
+    @Test
+    void updateCustomerPartial_WithFutureBirthDate_ThrowsException() {
+        Customer partialUpdate = new Customer();
+        partialUpdate.setBirthDate(LocalDate.now().plusDays(1).toString());
+
+        when(customerRepository.findById(1L)).thenReturn(Optional.of(testCustomer));
+
+        ValidationException exception = assertThrows(ValidationException.class, () -> {
+            customerService.updateCustomerPartial(1L, partialUpdate);
+        });
+
+        assertEquals("Birth date cannot be in the future", exception.getMessage());
+        verify(customerRepository, never()).save(any(Customer.class));
+    }
+
+    @Test
     void deleteCustomer_Success() {
         when(customerRepository.findById(1L)).thenReturn(Optional.of(testCustomer));
         when(accountRepository.findByCustomerId(1L)).thenReturn(Arrays.asList());
