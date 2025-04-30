@@ -10,6 +10,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -55,11 +56,73 @@ class CustomerServiceTest {
     }
 
     @Test
-    void createCustomer_WithExistingEmail_ThrowsException() {
-        when(customerRepository.findByEmail(anyString())).thenReturn(Optional.of(testCustomer));
+    void createCustomer_WithValidEmail_Success() {
+        // Arrange
+        Customer newCustomer = new Customer();
+        newCustomer.setName("Test User");
+        newCustomer.setEmail("valid@email.com");
+        newCustomer.setBirthDate(LocalDate.now().minusYears(20).toString());
+
+        when(customerRepository.findByEmail("valid@email.com")).thenReturn(Optional.empty());
+        when(customerRepository.save(any(Customer.class))).thenReturn(newCustomer);
+
+        // Act
+        Customer result = customerService.createCustomer(newCustomer);
+
+        // Assert
+        assertNotNull(result);
+        assertEquals("valid@email.com", result.getEmail());
+        verify(customerRepository).save(any(Customer.class));
+    }
+
+    @Test
+    void createCustomer_WithInvalidEmail_ThrowsException() {
+        // Arrange
+        Customer newCustomer = new Customer();
+        newCustomer.setName("Test User");
+        newCustomer.setEmail("invalid-email");
+        newCustomer.setBirthDate(LocalDate.now().minusYears(20).toString());
+
+        // Act & Assert
+        ValidationException exception = assertThrows(ValidationException.class, () -> {
+            customerService.createCustomer(newCustomer);
+        });
+
+        assertEquals("Invalid email format", exception.getMessage());
+        verify(customerRepository, never()).save(any(Customer.class));
+    }
+
+    @Test
+    void createCustomer_WithDuplicateEmail_ThrowsException() {
+        // Arrange
+        Customer existingCustomer = new Customer();
+        existingCustomer.setEmail("existing@email.com");
+
+        Customer newCustomer = new Customer();
+        newCustomer.setName("Test User");
+        newCustomer.setEmail("existing@email.com");
+        newCustomer.setBirthDate(LocalDate.now().minusYears(20).toString());
+
+        when(customerRepository.findByEmail("existing@email.com")).thenReturn(Optional.of(existingCustomer));
+
+        // Act & Assert
+        ValidationException exception = assertThrows(ValidationException.class, () -> {
+            customerService.createCustomer(newCustomer);
+        });
+
+        assertEquals("Email already exists", exception.getMessage());
+        verify(customerRepository, never()).save(any(Customer.class));
+    }
+
+    @Test
+    void createCustomer_WithFutureBirthDate_ThrowsException() {
+        Customer customerWithFutureDate = new Customer();
+        customerWithFutureDate.setName("Test User");
+        customerWithFutureDate.setEmail("test@example.com");
+        customerWithFutureDate.setBirthDate(LocalDate.now().plusDays(1).toString());
 
         assertThrows(ValidationException.class, () -> {
-            customerService.createCustomer(testCustomer);
+            customerService.createCustomer(customerWithFutureDate);
         });
 
         verify(customerRepository, never()).save(any(Customer.class));

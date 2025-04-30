@@ -2,6 +2,7 @@ package com.banking.controllers;
 
 import com.banking.entities.Customer;
 import com.banking.services.CustomerService;
+import com.banking.utils.exception.ValidationException;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -9,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
 import java.util.List;
 
 @RestController
@@ -24,9 +26,18 @@ public class CustomerController {
     }
 
     @PostMapping
-    public ResponseEntity<Customer> createCustomer(@Valid @RequestBody Customer customer) {
-        Customer createdCustomer = customerService.createCustomer(customer);
-        return ResponseEntity.status(HttpStatus.CREATED).body(createdCustomer);
+    public ResponseEntity<?> createCustomer(@RequestBody Customer customer) {
+        try {
+            if (customer.getEmail() == null || customer.getName() == null || customer.getBirthDate() == null) {
+                return ResponseEntity.badRequest()
+                        .body(Collections.singletonMap("error", "Missing required fields"));
+            }
+            Customer createdCustomer = customerService.createCustomer(customer);
+            return ResponseEntity.status(HttpStatus.CREATED).body(createdCustomer);
+        } catch (ValidationException e) {
+            return ResponseEntity.badRequest()
+                    .body(Collections.singletonMap("error", e.getMessage()));
+        }
     }
 
     @GetMapping("/{id}")
