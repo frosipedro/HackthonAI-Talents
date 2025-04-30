@@ -13,6 +13,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -169,5 +171,29 @@ class AccountServiceTest {
 
         verify(accountRepository, never()).save(any(Account.class));
         verify(transactionRepository, never()).save(any(Transaction.class));
+    }
+
+    @Test
+    void getAccountsByCustomerId_Success() {
+        when(customerRepository.existsById(1L)).thenReturn(true);
+        when(accountRepository.findByCustomerId(1L)).thenReturn(Arrays.asList(testAccount));
+
+        List<Account> result = accountService.getAccountsByCustomerId(1L);
+
+        assertNotNull(result);
+        assertFalse(result.isEmpty());
+        assertEquals(1, result.size());
+        assertEquals(testAccount.getId(), result.get(0).getId());
+    }
+
+    @Test
+    void getAccountsByCustomerId_CustomerNotFound() {
+        when(customerRepository.existsById(1L)).thenReturn(false);
+
+        assertThrows(NotFoundException.class, () -> {
+            accountService.getAccountsByCustomerId(1L);
+        });
+
+        verify(accountRepository, never()).findByCustomerId(any());
     }
 }

@@ -5,6 +5,7 @@ import com.banking.dto.DepositRequest;
 import com.banking.dto.WithdrawRequest;
 import com.banking.entities.Account;
 import com.banking.services.AccountService;
+import com.banking.utils.exception.NotFoundException;
 import com.banking.utils.exception.ValidationException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -15,10 +16,14 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.Arrays;
+import java.util.List;
+
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -126,5 +131,25 @@ class AccountControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(withdrawRequest)))
                 .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void getAccountsByCustomerId_Success() throws Exception {
+        List<Account> accounts = Arrays.asList(testAccount);
+        when(accountService.getAccountsByCustomerId(1L)).thenReturn(accounts);
+
+        mockMvc.perform(get("/api/accounts/customer/1"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].id").value(testAccount.getId()))
+                .andExpect(jsonPath("$[0].customerId").value(testAccount.getCustomerId()))
+                .andExpect(jsonPath("$[0].accountType").value(testAccount.getAccountType()));
+    }
+
+    @Test
+    void getAccountsByCustomerId_CustomerNotFound() throws Exception {
+        when(accountService.getAccountsByCustomerId(1L)).thenThrow(new NotFoundException("Customer not found"));
+
+        mockMvc.perform(get("/api/accounts/customer/1"))
+                .andExpect(status().isNotFound());
     }
 }
