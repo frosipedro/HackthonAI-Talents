@@ -4,6 +4,7 @@ import com.banking.entities.Customer;
 import com.banking.entities.Account;
 import com.banking.repositories.CustomerRepository;
 import com.banking.repositories.AccountRepository;
+import com.banking.utils.ValidationUtils;
 import com.banking.utils.exception.ValidationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,9 +25,18 @@ public class CustomerService {
     }
 
     public Customer createCustomer(Customer customer) {
+
+        if (!ValidationUtils.isValidEmail(customer.getEmail())) {
+            throw new ValidationException("Invalid email format");
+        }
+
         Optional<Customer> existingCustomer = customerRepository.findByEmail(customer.getEmail());
         if (existingCustomer.isPresent()) {
-            throw new ValidationException("Email is already taken");
+            throw new ValidationException("Email already exists");
+        }
+
+        if (!ValidationUtils.isNotFutureDate(customer.getBirthDate())) {
+            throw new ValidationException("Birth date cannot be in the future");
         }
         return customerRepository.save(customer);
     }
