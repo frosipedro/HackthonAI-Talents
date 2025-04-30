@@ -28,6 +28,21 @@ This system simulates a digital bank, allowing customer registration, account op
 
 Pull requests are very welcome. Let's build an even better banking system together!
 
+## Contributors
+
+Here are the team members who contributed to the development of this project:
+
+- Danilo Honorio dos Santos https://github.com/DaniloHSantos
+- Pedro Rockenbach Frosi https://github.com/frosipedro
+- Henrique Rafael Daltrozo https://github.com/henriquedaltrozo
+- Jessye Kessia de Carvalho Pereira https://github.com/JessyeKessia
+- Luan Carlos Gerlach https://github.com/LuancGerlach
+- Layon Jose Pedrosa dos Reis https://github.com/Layonj3000
+- Nathan Weirich da Silva https://github.com/NathanWeirich
+- Pedro Henrique Rossetto Natal https://github.com/rnPedro
+- Renato Rodrigues da Silva https://github.com/rodrigues-renato
+- Samuel Guilherme Rodrigues da Costa https://github.com/samuel-guilherme-costa
+  
 ---
 
 Made with 💜 by people passionate about technology and innovation.
