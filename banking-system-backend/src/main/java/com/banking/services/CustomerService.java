@@ -1,7 +1,9 @@
 package com.banking.services;
 
 import com.banking.entities.Customer;
+import com.banking.entities.Account;
 import com.banking.repositories.CustomerRepository;
+import com.banking.repositories.AccountRepository;
 import com.banking.utils.exception.ValidationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,10 +15,12 @@ import java.util.Optional;
 public class CustomerService {
 
     private final CustomerRepository customerRepository;
+    private final AccountRepository accountRepository; // Adiciona AccountRepository
 
     @Autowired
-    public CustomerService(CustomerRepository customerRepository) {
+    public CustomerService(CustomerRepository customerRepository, AccountRepository accountRepository) {
         this.customerRepository = customerRepository;
+        this.accountRepository = accountRepository;
     }
 
     public Customer createCustomer(Customer customer) {
@@ -33,7 +37,7 @@ public class CustomerService {
             throw new ValidationException("Customer not found with id " + id);
         }
         return customer.get();
-    }    
+    }
 
     public List<Customer> getAllCustomers() {
         return customerRepository.findAll();
@@ -56,6 +60,10 @@ public class CustomerService {
         if (customer.isEmpty()) {
             throw new ValidationException("Customer not found with id " + id);
         }
+
+        List<Account> customerAccounts = accountRepository.findByCustomerId(id);
+        accountRepository.deleteAll(customerAccounts);
+
         customerRepository.deleteById(id);
-    }    
+    }
 }

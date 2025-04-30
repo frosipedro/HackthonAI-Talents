@@ -1,6 +1,7 @@
 package com.banking.services;
 
 import com.banking.entities.Customer;
+import com.banking.repositories.AccountRepository;
 import com.banking.repositories.CustomerRepository;
 import com.banking.utils.exception.ValidationException;
 import org.junit.jupiter.api.BeforeEach;
@@ -21,6 +22,8 @@ class CustomerServiceTest {
 
     @Mock
     private CustomerRepository customerRepository;
+    @Mock
+    private AccountRepository accountRepository;
 
     @InjectMocks
     private CustomerService customerService;
@@ -125,9 +128,14 @@ class CustomerServiceTest {
     @Test
     void deleteCustomer_Success() {
         when(customerRepository.findById(1L)).thenReturn(Optional.of(testCustomer));
+        when(accountRepository.findByCustomerId(1L)).thenReturn(Arrays.asList());
         doNothing().when(customerRepository).deleteById(1L);
+        doNothing().when(accountRepository).deleteAll(anyList());
 
         assertDoesNotThrow(() -> customerService.deleteCustomer(1L));
+
+        verify(accountRepository).findByCustomerId(1L);
+        verify(accountRepository).deleteAll(anyList());
         verify(customerRepository).deleteById(1L);
     }
 
