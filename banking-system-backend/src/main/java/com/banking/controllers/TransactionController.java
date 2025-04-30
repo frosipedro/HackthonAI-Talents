@@ -1,8 +1,8 @@
 package com.banking.controllers;
 
 import com.banking.dto.TransactionReportDTO;
-import com.banking.entities.Transaction;
 import com.banking.services.TransactionService;
+import com.banking.utils.exception.ValidationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +23,11 @@ public class TransactionController {
             @PathVariable Long customerId,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
+
+        if (startDate.isAfter(endDate)) {
+            throw new ValidationException("Start date must be before or equal to end date");
+        }
+
         List<TransactionReportDTO> transactions = transactionService.getTransactionsForCustomer(customerId, startDate,
                 endDate);
         return ResponseEntity.ok(transactions);
