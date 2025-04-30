@@ -100,11 +100,10 @@ banking-system
     
    Request:
    ```
-  {
-  "name": "John Doe",
-  "email": "john.doe@example.com",
-  "birthDate": "1990-05-20",
-  "cpf": "52998224725"
+   {
+    "name": "John Doe",
+    "email": "john.doe@example.com",
+    "birthDate": "1990-05-20"
    }
    ```
    Response:
@@ -113,8 +112,7 @@ banking-system
     "id": 100001,
     "name": "John Doe",
     "email": "john.doe@example.com",
-    "birthDate": "1990-05-20",
-    "cpf": "52998224725"
+    "birthDate": "1990-05-20"
    }
    ```
    
@@ -130,8 +128,7 @@ banking-system
     "id": 100001,
     "name": "John Doe",
     "email": "john.doe@example.com",
-    "birthDate": "1990-05-20",
-    "cpf": "52998224725"
+    "birthDate": "1990-05-20"
    }
    ```
  
@@ -141,22 +138,20 @@ banking-system
    ```
    No content
    ```
-  Response:
+   Response:
    ```
    [
     {
-        "id": 100001,
-        "name": "John Doe",
-        "email": "john.doe@example.com",
-        "birthDate": "1990-05-20",
-        "cpf": "52998224725"
+     "id": 100001,
+     "name": "John Doe",
+     "email": "john.doe@example.com",
+     "birthDate": "1990-05-20"
     },
     {
-        "id": 100002,
-        "name": "Peter Doe",
-        "email": "peter.doe@example.com",
-        "birthDate": "1990-12-01",
-        "cpf": "20583006027"
+     "id": 100002,
+     "name": "Peter Doe",
+     "email": "peter.doe@example.com",
+     "birthDate": "1990-12-01"
     }
    ]
    ```
@@ -165,10 +160,9 @@ banking-system
  
    Request:
    ```
-  {
+   {
     "name": "John Doe Updated",
     "email": "john.updated@example.com",
-    "cpf": "26382483044",
     "birthDate": "1990-05-20"
    }
    ```
@@ -178,8 +172,7 @@ banking-system
     "id": 100001,
     "name": "John Doe Updated",
     "email": "john.updated@example.com",
-    "birthDate": "1990-05-20",
-    "cpf": "26382483044"
+    "birthDate": "1990-05-20"
    }
    ```
    
@@ -197,8 +190,7 @@ banking-system
     "id": 100001,
     "name": "John",
     "email": "john.updated@example.com",
-    "birthDate": "1990-05-20",
-    "cpf": "26382483044"
+    "birthDate": "1990-05-20"
    }
    ```
    
@@ -234,7 +226,7 @@ banking-system
    ```
  - `GET /accounts/customer/{id}`: Retrieve an account by customer ID.
 
-  Request:
+   Request:
    ```
    No content
    ```
@@ -242,17 +234,17 @@ banking-system
    ```
    [
     {
-        "id": 100002,
-        "customerId": 100003,
-        "accountType": "C",
-        "balance": 0.0
+     "id": 100002,
+     "customerId": 100003,
+     "accountType": "C",
+     "balance": 0.0
     }
    ]
    ```
   
   - `POST /accounts/deposit`: Deposit to an account.
 
-  Request:
+   Request:
    ```
    {
     "accountId": 100002,
@@ -299,10 +291,10 @@ banking-system
    ```
    [
     {
-      "date": "2025-04-30",
-      "accountType": "C",
-      "transactionType": "D",
-      "amount": 100000.0
+     "date": "2025-04-30",
+     "accountType": "C",
+     "transactionType": "D",
+     "amount": 100000.0
     }
    ]
    ```
