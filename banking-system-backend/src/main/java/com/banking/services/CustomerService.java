@@ -4,6 +4,7 @@ import com.banking.entities.Customer;
 import com.banking.entities.Account;
 import com.banking.repositories.CustomerRepository;
 import com.banking.repositories.AccountRepository;
+import com.banking.repositories.TransactionRepository;
 import com.banking.utils.ValidationUtils;
 import com.banking.utils.constants.MessageConstants;
 import com.banking.utils.exception.ValidationException;
@@ -15,14 +16,18 @@ import java.util.Optional;
 
 @Service
 public class CustomerService {
-
     private final CustomerRepository customerRepository;
-    private final AccountRepository accountRepository; // Adiciona AccountRepository
+    private final AccountRepository accountRepository;
+    private final TransactionRepository transactionRepository; // Adicionar isso
 
     @Autowired
-    public CustomerService(CustomerRepository customerRepository, AccountRepository accountRepository) {
+    public CustomerService(
+            CustomerRepository customerRepository,
+            AccountRepository accountRepository,
+            TransactionRepository transactionRepository) { // Adicionar parâmetro
         this.customerRepository = customerRepository;
         this.accountRepository = accountRepository;
+        this.transactionRepository = transactionRepository; // Adicionar isso
     }
 
         public Customer createCustomer(Customer customer) {
@@ -147,6 +152,11 @@ public class CustomerService {
         }
 
         List<Account> customerAccounts = accountRepository.findByCustomerId(id);
+
+        for (Account account : customerAccounts) {
+            transactionRepository.deleteByAccountId(account.getId());
+        }
+
         accountRepository.deleteAll(customerAccounts);
 
         customerRepository.deleteById(id);
