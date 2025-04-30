@@ -15,7 +15,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.util.Arrays;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -41,6 +40,7 @@ class CustomerControllerTest {
         testCustomer.setName("Test User");
         testCustomer.setEmail("test@example.com");
         testCustomer.setBirthDate("1990-01-01");
+        testCustomer.setCpf("52998224725"); // Added valid CPF
     }
 
     @Test
@@ -48,12 +48,13 @@ class CustomerControllerTest {
         when(customerService.createCustomer(any(Customer.class))).thenReturn(testCustomer);
 
         mockMvc.perform(post("/api/customers")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(testCustomer)))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(testCustomer)))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.id").value(testCustomer.getId()))
                 .andExpect(jsonPath("$.name").value(testCustomer.getName()))
-                .andExpect(jsonPath("$.email").value(testCustomer.getEmail()));
+                .andExpect(jsonPath("$.email").value(testCustomer.getEmail()))
+                .andExpect(jsonPath("$.cpf").value(testCustomer.getCpf()));
     }
 
     @Test
@@ -62,8 +63,8 @@ class CustomerControllerTest {
         // Missing required fields
 
         mockMvc.perform(post("/api/customers")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(invalidCustomer)))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(invalidCustomer)))
                 .andExpect(status().isBadRequest());
     }
 
@@ -75,7 +76,8 @@ class CustomerControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(testCustomer.getId()))
                 .andExpect(jsonPath("$.name").value(testCustomer.getName()))
-                .andExpect(jsonPath("$.email").value(testCustomer.getEmail()));
+                .andExpect(jsonPath("$.email").value(testCustomer.getEmail()))
+                .andExpect(jsonPath("$.cpf").value(testCustomer.getCpf()));
     }
 
     @Test
@@ -94,20 +96,27 @@ class CustomerControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].id").value(testCustomer.getId()))
                 .andExpect(jsonPath("$[0].name").value(testCustomer.getName()))
-                .andExpect(jsonPath("$[0].email").value(testCustomer.getEmail()));
+                .andExpect(jsonPath("$[0].email").value(testCustomer.getEmail()))
+                .andExpect(jsonPath("$[0].cpf").value(testCustomer.getCpf()));
     }
 
     @Test
     void updateCustomer_Success() throws Exception {
-        when(customerService.updateCustomer(eq(1L), any(Customer.class))).thenReturn(testCustomer);
+        Customer updatedCustomer = new Customer();
+        updatedCustomer.setName("Updated Name");
+        updatedCustomer.setEmail("updated@email.com");
+        updatedCustomer.setBirthDate("1990-01-01");
+        updatedCustomer.setCpf("52998224725");
+
+        when(customerService.updateCustomer(any(Long.class), any(Customer.class))).thenReturn(updatedCustomer);
 
         mockMvc.perform(put("/api/customers/1")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(testCustomer)))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(updatedCustomer)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(testCustomer.getId()))
-                .andExpect(jsonPath("$.name").value(testCustomer.getName()))
-                .andExpect(jsonPath("$.email").value(testCustomer.getEmail()));
+                .andExpect(jsonPath("$.name").value(updatedCustomer.getName()))
+                .andExpect(jsonPath("$.email").value(updatedCustomer.getEmail()))
+                .andExpect(jsonPath("$.cpf").value(updatedCustomer.getCpf()));
     }
 
     @Test

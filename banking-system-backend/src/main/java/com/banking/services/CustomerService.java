@@ -35,9 +35,23 @@ public class CustomerService {
             throw new ValidationException("Email already exists");
         }
 
+        if (!ValidationUtils.isValidCPF(customer.getCpf())) {
+            throw new ValidationException("Invalid CPF format");
+        }
+
+        Optional<Customer> existingCPF = customerRepository.findByCpf(customer.getCpf());
+        if (existingCPF.isPresent()) {
+            throw new ValidationException("CPF already exists");
+        }
+
         if (!ValidationUtils.isNotFutureDate(customer.getBirthDate())) {
             throw new ValidationException("Birth date cannot be in the future");
         }
+
+        if (!ValidationUtils.isAdult(customer.getBirthDate())) {
+            throw new ValidationException("Customer must be at least 18 years old");
+        }
+
         return customerRepository.save(customer);
     }
 
@@ -58,10 +72,37 @@ public class CustomerService {
         if (customer.isEmpty()) {
             throw new ValidationException("Customer not found with id " + id);
         }
+
         Customer existingCustomer = customer.get();
-        existingCustomer.setName(customerDetails.getName());
-        existingCustomer.setEmail(customerDetails.getEmail());
-        existingCustomer.setBirthDate(customerDetails.getBirthDate());
+
+        if (customerDetails.getCpf() != null && !customerDetails.getCpf().equals(existingCustomer.getCpf())) {
+            if (!ValidationUtils.isValidCPF(customerDetails.getCpf())) {
+                throw new ValidationException("Invalid CPF format");
+            }
+
+            Optional<Customer> existingCPF = customerRepository.findByCpf(customerDetails.getCpf());
+            if (existingCPF.isPresent()) {
+                throw new ValidationException("CPF already exists");
+            }
+            existingCustomer.setCpf(customerDetails.getCpf());
+        }
+
+        if (customerDetails.getName() != null) {
+            existingCustomer.setName(customerDetails.getName());
+        }
+        if (customerDetails.getEmail() != null) {
+            if (!ValidationUtils.isValidEmail(customerDetails.getEmail())) {
+                throw new ValidationException("Invalid email format");
+            }
+            existingCustomer.setEmail(customerDetails.getEmail());
+        }
+        if (customerDetails.getBirthDate() != null) {
+            if (!ValidationUtils.isNotFutureDate(customerDetails.getBirthDate())) {
+                throw new ValidationException("Birth date cannot be in the future");
+            }
+            existingCustomer.setBirthDate(customerDetails.getBirthDate());
+        }
+
         return customerRepository.save(existingCustomer);
     }
 

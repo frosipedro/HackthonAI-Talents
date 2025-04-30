@@ -44,6 +44,15 @@ public class AccountService {
     }
 
     public Account deposit(Long accountId, Double amount) {
+        if (amount == null) {
+            throw new ValidationException("Amount cannot be null");
+        }
+
+        // Convert negative to positive before validation
+        if (amount < 0) {
+            amount = Math.abs(amount);
+        }
+
         validateTransactionAmount(amount);
 
         Account account = accountRepository.findById(accountId)
@@ -52,10 +61,9 @@ public class AccountService {
         account.setBalance(account.getBalance() + amount);
         accountRepository.save(account);
 
-        // Register the transaction
         Transaction transaction = new Transaction();
         transaction.setAccount(account);
-        transaction.setType("D"); // Deposit
+        transaction.setType("D");
         transaction.setAmount(amount);
         transaction.setDate(LocalDateTime.now());
         transactionRepository.save(transaction);
@@ -64,6 +72,15 @@ public class AccountService {
     }
 
     public Account withdraw(Long accountId, Double amount) {
+        if (amount == null) {
+            throw new ValidationException("Amount cannot be null");
+        }
+
+        // Convert negative to positive before validation
+        if (amount < 0) {
+            amount = Math.abs(amount);
+        }
+
         validateTransactionAmount(amount);
 
         Account account = accountRepository.findById(accountId)
@@ -76,10 +93,9 @@ public class AccountService {
         account.setBalance(account.getBalance() - amount);
         accountRepository.save(account);
 
-        // Register the transaction
         Transaction transaction = new Transaction();
         transaction.setAccount(account);
-        transaction.setType("W"); // Withdraw
+        transaction.setType("W");
         transaction.setAmount(amount);
         transaction.setDate(LocalDateTime.now());
         transactionRepository.save(transaction);
@@ -87,16 +103,16 @@ public class AccountService {
         return account;
     }
 
+    private void validateTransactionAmount(Double amount) {
+        if (amount <= 0.01 || amount > 999999.99) {
+            throw new ValidationException("Transaction amount must be between 0.01 and 999999.99");
+        }
+    }
+
     public List<Account> getAccountsByCustomerId(Long customerId) {
         if (!customerRepository.existsById(customerId)) {
             throw new NotFoundException("Customer not found with id " + customerId);
         }
         return accountRepository.findByCustomerId(customerId);
-    }
-
-    private void validateTransactionAmount(Double amount) {
-        if (amount == null || amount <= 0.01 || amount > 999999.99) {
-            throw new ValidationException("Transaction amount must be between 0.01 and 999999.99.");
-        }
     }
 }

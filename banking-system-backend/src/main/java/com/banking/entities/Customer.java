@@ -3,6 +3,7 @@ package com.banking.entities;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Pattern;
 
 @Entity
 public class Customer {
@@ -21,6 +22,11 @@ public class Customer {
 
     @NotBlank(message = "Birth date is mandatory")
     private String birthDate; // Format: YYYY-MM-DD
+
+    @NotBlank(message = "CPF is mandatory")
+    @Column(unique = true)
+    @Pattern(regexp = "^\\d{11}$", message = "CPF must have 11 digits")
+    private String cpf;
 
     // Getters and Setters
     public Long getId() {
@@ -54,4 +60,8 @@ public class Customer {
     public void setBirthDate(String birthDate) {
         this.birthDate = birthDate;
     }
+
+    public String getCpf() { return cpf; }
+
+    public void setCpf(String cpf) { this.cpf = cpf; }
 }
