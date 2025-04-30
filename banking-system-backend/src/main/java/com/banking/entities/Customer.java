@@ -17,17 +17,11 @@ public class Customer {
 
     @Email(message = "Email should be valid")
     @NotBlank(message = "Email is required")
-    @Column(unique = true)  
+    @Column(unique = true)
     private String email;
 
     @NotBlank(message = "Birth date is required")
-
     private String birthDate; // Format: YYYY-MM-DD
-
-    @NotBlank(message = "CPF is required")
-    @Column(unique = true)
-    @Pattern(regexp = "^\\d{11}$", message = "CPF must have 11 digits")
-    private String cpf;
 
     // Getters and Setters
     public Long getId() {
@@ -61,8 +55,4 @@ public class Customer {
     public void setBirthDate(String birthDate) {
         this.birthDate = birthDate;
     }
-
-    public String getCpf() { return cpf; }
-
-    public void setCpf(String cpf) { this.cpf = cpf; }
 }
