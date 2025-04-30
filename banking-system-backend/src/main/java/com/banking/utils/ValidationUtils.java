@@ -1,6 +1,7 @@
 package com.banking.utils;
 
 import java.time.LocalDate;
+import java.time.Period;
 import java.time.format.DateTimeParseException;
 
 public class ValidationUtils {
@@ -23,6 +24,16 @@ public class ValidationUtils {
             LocalDate inputDate = LocalDate.parse(date);
             LocalDate currentDate = LocalDate.now();
             return !inputDate.isAfter(currentDate);
+        } catch (DateTimeParseException e) {
+            return false;
+        }
+    }
+
+    public static boolean isAdult(String birthDate) {
+        try {
+            LocalDate dob = LocalDate.parse(birthDate);
+            LocalDate now = LocalDate.now();
+            return Period.between(dob, now).getYears() >= 18;
         } catch (DateTimeParseException e) {
             return false;
         }

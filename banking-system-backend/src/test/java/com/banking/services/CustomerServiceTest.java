@@ -129,6 +129,20 @@ class CustomerServiceTest {
     }
 
     @Test
+    void createCustomer_WithMinorAge_ThrowsException() {
+        Customer minorCustomer = new Customer();
+        minorCustomer.setName("Minor User");
+        minorCustomer.setEmail("minor@example.com");
+        minorCustomer.setBirthDate(LocalDate.now().minusYears(17).toString());
+
+        assertThrows(ValidationException.class, () -> {
+            customerService.createCustomer(minorCustomer);
+        });
+
+        verify(customerRepository, never()).save(any(Customer.class));
+    }
+
+    @Test
     void getCustomerById_Success() {
         when(customerRepository.findById(1L)).thenReturn(Optional.of(testCustomer));
 

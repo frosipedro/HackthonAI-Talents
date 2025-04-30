@@ -38,6 +38,11 @@ public class CustomerService {
         if (!ValidationUtils.isNotFutureDate(customer.getBirthDate())) {
             throw new ValidationException("Birth date cannot be in the future");
         }
+
+        if (!ValidationUtils.isAdult(customer.getBirthDate())) {
+            throw new ValidationException("Customer must be at least 18 years old");
+        }
+
         return customerRepository.save(customer);
     }
 
