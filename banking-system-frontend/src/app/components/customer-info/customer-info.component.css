@@ -1,0 +1,35 @@
+.customer-info {
+    padding: 20px;
+    background-color: var(--cor-1);
+    border: 1px solid var(--cor-4);
+    border-radius: 5px;
+    color: var(--cor-3);
+  }
+  
+  .customer-info h2 {
+    color: var(--cor-2);
+    margin-bottom: 15px;
+  }
+  
+  .customer-info p {
+    margin: 5px 0;
+  }
+  
+  .customer-info h3 {
+    color: var(--cor-2);
+    margin-top: 20px;
+  }
+  
+  .customer-info ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .customer-info li {
+    padding: 5px;
+    border-bottom: 1px solid var(--cor-4);
+  }
+  
+  .customer-info li:last-child {
+    border-bottom: none;
+  }

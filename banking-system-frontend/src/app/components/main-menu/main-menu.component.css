@@ -1,0 +1,51 @@
+/* Styles for the main menu component */
+body, html {
+    height: 100%;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.logo-img {
+    width: 50px;
+    height: auto;
+}
+.container {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.main-menu {
+    width: 300px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background-color: #e4e4e4;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.main-menu h1 {
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: #57429D;
+}
+
+.main-menu button {
+    margin: 10px 0;
+    padding: 10px 20px;
+    font-size: 16px;
+    color: #fff;
+    background-color: #57429D;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.main-menu button:hover {
+    background-color: #57429D;
+}

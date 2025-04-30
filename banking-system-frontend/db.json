@@ -1,0 +1,114 @@
+{
+  "customers": [
+    {
+      "id": "1",
+      "customerId": "001",
+      "fullName": "João Silva",
+      "email": "joao@exemplo.com",
+      "birthDate": "1990-01-01"
+    },
+    {
+      "id": "2",
+      "customerId": "002",
+      "fullName": "Maria Souza",
+      "email": "maria@exemplo.com",
+      "birthDate": "1985-02-15"
+    },
+    {
+      "id": "3",
+      "name": "Jessye Késsia de Carvalho Pereira",
+      "email": "jessyekessia16@gmail.com",
+      "birthDate": "4334-03-31"
+    },
+    {
+      "id": "003",
+      "name": "Jessye Késsia de Carvalho Pereira",
+      "email": "jessyekessia16@gmail.com",
+      "birthDate": "0043-04-23"
+    },
+    {
+      "id": "003",
+      "name": "Jessye Késsia de Carvalho Pereira",
+      "email": "jessyekessia16@gmail.com",
+      "birthDate": "23434-04-23"
+    },
+    {
+      "id": "3",
+      "name": "Jessye Késsia de Carvalho Pereira",
+      "email": "jessyekessia16@gmail.com",
+      "birthDate": "2022-03-21"
+    }
+  ],
+  "accounts": [
+    {
+      "id": "1",
+      "accountNumber": "001",
+      "type": "Deposito",
+      "value": 1500,
+      "date": "2025-04-01",
+      "transactions": [
+        {
+          "id": "1",
+          "type": "deposit",
+          "value": 500,
+          "date": "2024-01-01"
+        },
+        {
+          "id": "2",
+          "type": "withdraw",
+          "value": 200,
+          "date": "2024-01-10"
+        }
+      ]
+    },
+    {
+      "id": "2",
+      "accountNumber": "001",
+      "type": "Saque",
+      "value": 500,
+      "date": "2025-04-05"
+    },
+    {
+      "id": "3",
+      "accountNumber": "002",
+      "type": "Deposito",
+      "value": 1000,
+      "date": "2025-04-03"
+    },
+    {
+      "id": "4",
+      "accountNumber": "002",
+      "type": "Transferencia",
+      "value": 200,
+      "date": "2025-04-06"
+    },
+    {
+      "id": "f81e",
+      "accountNumber": "121",
+      "customerId": "2",
+      "accountType": "savings",
+      "initialBalance": 12
+    },
+    {
+      "id": "5b04",
+      "accountNumber": "121",
+      "customerId": "2",
+      "accountType": "savings",
+      "initialBalance": 12
+    },
+    {
+      "id": "90ff",
+      "accountNumber": "1",
+      "customerId": "2",
+      "accountType": "savings",
+      "initialBalance": 12
+    },
+    {
+      "id": "480c",
+      "accountNumber": "1",
+      "customerId": "2",
+      "accountType": "savings",
+      "initialBalance": 12
+    }
+  ]
+}

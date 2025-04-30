@@ -1,0 +1,23 @@
+<form (ngSubmit)="onSubmit()" class="customer-form" [formGroup]="registrationForm">
+  <div>
+    <label for="customerId">ID do Cliente:</label>
+    <input type="text" id="customerId" name="customerId" formControlName="id">
+  </div>
+  
+  <div>
+    <label for="fullName">Nome Completo:</label>
+    <input type="text" id="fullName" name="fullName" formControlName="name">
+  </div>
+  
+  <div>
+    <label for="email">E-mail:</label>
+    <input type="email" id="email" name="email" formControlName="email">
+  </div>
+  
+  <div>
+    <label for="birthDate">Data de Nascimento:</label>
+    <input type="date" id="birthDate" name="birthDate" formControlName="birthDate">
+  </div>
+  
+  <button type="submit">Cadastrar Cliente</button>
+</form>
