@@ -41,7 +41,6 @@ class CustomerControllerTest {
         testCustomer.setName("Test User");
         testCustomer.setEmail("test@example.com");
         testCustomer.setBirthDate("1990-01-01");
-        testCustomer.setCpf("52998224725"); // CPF válido
     }
 
     @Test
@@ -54,8 +53,7 @@ class CustomerControllerTest {
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.id").value(testCustomer.getId()))
                 .andExpect(jsonPath("$.name").value(testCustomer.getName()))
-                .andExpect(jsonPath("$.email").value(testCustomer.getEmail()))
-                .andExpect(jsonPath("$.cpf").value(testCustomer.getCpf()));
+                .andExpect(jsonPath("$.email").value(testCustomer.getEmail()));
     }
 
     @Test
@@ -77,8 +75,7 @@ class CustomerControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(testCustomer.getId()))
                 .andExpect(jsonPath("$.name").value(testCustomer.getName()))
-                .andExpect(jsonPath("$.email").value(testCustomer.getEmail()))
-                .andExpect(jsonPath("$.cpf").value(testCustomer.getCpf()));
+                .andExpect(jsonPath("$.email").value(testCustomer.getEmail()));
     }
 
     @Test
@@ -98,8 +95,7 @@ class CustomerControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].id").value(testCustomer.getId()))
                 .andExpect(jsonPath("$[0].name").value(testCustomer.getName()))
-                .andExpect(jsonPath("$[0].email").value(testCustomer.getEmail()))
-                .andExpect(jsonPath("$[0].cpf").value(testCustomer.getCpf()));
+                .andExpect(jsonPath("$[0].email").value(testCustomer.getEmail()));
     }
 
     @Test
@@ -108,7 +104,6 @@ class CustomerControllerTest {
         updatedCustomer.setName("Updated Name");
         updatedCustomer.setEmail("updated@email.com");
         updatedCustomer.setBirthDate("1990-01-01");
-        updatedCustomer.setCpf("52998224725");
 
         when(customerService.updateCustomer(any(Long.class), any(Customer.class))).thenReturn(updatedCustomer);
 
@@ -117,8 +112,7 @@ class CustomerControllerTest {
                         .content(objectMapper.writeValueAsString(updatedCustomer)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name").value(updatedCustomer.getName()))
-                .andExpect(jsonPath("$.email").value(updatedCustomer.getEmail()))
-                .andExpect(jsonPath("$.cpf").value(updatedCustomer.getCpf()));
+                .andExpect(jsonPath("$.email").value(updatedCustomer.getEmail()));
     }
 
     @Test

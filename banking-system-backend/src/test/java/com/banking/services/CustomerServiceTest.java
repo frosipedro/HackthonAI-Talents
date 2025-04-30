@@ -49,7 +49,6 @@ class CustomerServiceTest {
         customer.setName("Test User");
         customer.setEmail("test@example.com");
         customer.setBirthDate("1990-01-01");
-        customer.setCpf("12345678909");
 
         when(customerRepository.save(any(Customer.class))).thenReturn(customer);
 
@@ -64,7 +63,6 @@ class CustomerServiceTest {
         customer.setName("Test User");
         customer.setEmail("valid.email@domain.com");
         customer.setBirthDate("1990-01-01");
-        customer.setCpf("52998224725");
 
         when(customerRepository.save(any(Customer.class))).thenReturn(customer);
 
@@ -114,7 +112,6 @@ class CustomerServiceTest {
         customerWithFutureDate.setName("Test User");
         customerWithFutureDate.setEmail("test@example.com");
         customerWithFutureDate.setBirthDate(LocalDate.now().plusDays(1).toString());
-        customerWithFutureDate.setCpf("52998224725"); // Add valid CPF
 
         ValidationException exception = assertThrows(ValidationException.class, () -> {
             customerService.createCustomer(customerWithFutureDate);
@@ -124,40 +121,6 @@ class CustomerServiceTest {
         verify(customerRepository, never()).save(any(Customer.class));
     }
 
-    @Test
-    void createCustomer_WithInvalidCPF_ThrowsException() {
-        Customer customer = new Customer();
-        customer.setName("Test User");
-        customer.setEmail("test@example.com");
-        customer.setBirthDate("1990-01-01");
-        customer.setCpf("12345");
-
-        assertThrows(ValidationException.class, () -> {
-            customerService.createCustomer(customer);
-        });
-
-        verify(customerRepository, never()).save(any(Customer.class));
-    }
-
-    @Test
-    void createCustomer_WithDuplicateCPF_ThrowsException() {
-        Customer existingCustomer = new Customer();
-        existingCustomer.setCpf("12345678901");
-
-        Customer newCustomer = new Customer();
-        newCustomer.setName("Test User");
-        newCustomer.setEmail("test@example.com");
-        newCustomer.setBirthDate("1990-01-01");
-        newCustomer.setCpf("12345678901");
-
-        when(customerRepository.findByCpf("12345678901")).thenReturn(Optional.of(existingCustomer));
-
-        assertThrows(ValidationException.class, () -> {
-            customerService.createCustomer(newCustomer);
-        });
-
-        verify(customerRepository, never()).save(any(Customer.class));
-    }
 
     @Test
     void getCustomerById_Success() {
